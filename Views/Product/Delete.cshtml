@@ -5,13 +5,37 @@
 
 <div>
     <h4>@Model.Name</h4>
-    <p>SKU: @Model.SKU</p>
-    <p>Price: @Model.UnitPrice</p>
-    <p>Stock: @Model.StockQuantity</p>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SKU)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SKU)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.UnitPrice)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.UnitPrice)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.StockQuantity)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.StockQuantity)
+        </dd>
+    </dl>
 </div>
 
 <form asp-action="DeleteConfirmed" method="post">
-    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="ProductId" />
     <button type="submit" class="btn btn-danger">Delete</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
 </form>

@@ -1,0 +1,9 @@
+﻿@model InventoryManagement.Models.Product
+
+<h2>Product Details</h2>
+<p><strong>Name:</strong> @Model.Name</p>
+<p><strong>SKU:</strong> @Model.SKU</p>
+<p><strong>Price:</strong> @Model.UnitPrice</p>
+<p><strong>Stock:</strong> @Model.StockQuantity</p>
+
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>

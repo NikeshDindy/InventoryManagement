@@ -18,5 +18,6 @@
 
         public ICollection<OrderDetail> OrderDetails { get; set; }
         public ICollection<InventoryTransaction> Transactions { get; set; }
+        public int Id { get; internal set; }
     }
 }

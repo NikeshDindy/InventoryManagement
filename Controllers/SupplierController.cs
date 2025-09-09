@@ -1,10 +1,12 @@
 ﻿using InventoryManagement.Models;
 using InventoryManagement.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace InventoryManagement.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class SupplierController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace InventoryManagement.Controllers
 {
+    [Authorize(Roles = "Admin,Manager")]
     public class OrderController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

@@ -95,14 +95,14 @@ namespace InventoryManagement.Controllers
                 var user = await _userManager.FindByEmailAsync(model.Email);
                 var roles = await _userManager.GetRolesAsync(user);
 
-                // Redirect according to role
-                if (roles.Contains("Admin"))
-                    return RedirectToAction("AdminDashboard", "Home");
-                else if (roles.Contains("Manager"))
-                    return RedirectToAction("ManagerDashboard", "Home");
-                else if (roles.Contains("Staff"))
-                    return RedirectToAction("StaffDashboard", "Home");
-                else
+                //Redirect according to role
+                //if (roles.Contains("Admin"))
+                //    return RedirectToAction("AdminDashboard", "Home");
+                //else if (roles.Contains("Manager"))
+                //    return RedirectToAction("ManagerDashboard", "Home");
+                //else if (roles.Contains("Staff"))
+                //    return RedirectToAction("StaffDashboard", "Home");
+                //else
                     return RedirectToAction("Index", "Home");
             }
 

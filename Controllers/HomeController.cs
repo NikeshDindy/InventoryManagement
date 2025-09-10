@@ -18,7 +18,7 @@ namespace InventoryManagement.Controllers
             if (User.IsInRole("Staff"))
                 return RedirectToAction("StaffDashboard");
 
-            return RedirectToAction("AccessDenied");
+            return View();
         }
 
         [Authorize(Roles = "Admin")]

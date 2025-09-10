@@ -1,32 +1,47 @@
-using System.Diagnostics;
 using InventoryManagement.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace InventoryManagement.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
-
         public IActionResult Index()
         {
-            return View();
+            if (User.IsInRole("Admin"))
+                return RedirectToAction("AdminDashboard");
+
+            if (User.IsInRole("Manager"))
+                return RedirectToAction("ManagerDashboard");
+
+            if (User.IsInRole("Staff"))
+                return RedirectToAction("StaffDashboard");
+
+            return RedirectToAction("AccessDenied");
         }
 
-        public IActionResult Privacy()
+        [Authorize(Roles = "Admin")]
+        public IActionResult AdminDashboard()
         {
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [Authorize(Roles = "Manager")]
+        public IActionResult ManagerDashboard()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View();
+        }
+
+        [Authorize(Roles = "Staff")]
+        public IActionResult StaffDashboard()
+        {
+            return View();
+        }
+
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
     }
 }

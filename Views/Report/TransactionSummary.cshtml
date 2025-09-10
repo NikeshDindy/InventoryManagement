@@ -1,0 +1,33 @@
+﻿@model IEnumerable<InventoryManagement.Models.InventoryTransaction>
+
+@{
+    ViewData["Title"] = "Transaction Summary";
+}
+
+<h2>Transaction Summary</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Transaction Type</th>
+            <th>Quantity</th>
+            <th>Date & Time</th>
+            <th>Performed By</th>
+            <th>Notes</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var transaction in Model)
+        {
+            <tr>
+                <td>@transaction.Product?.Name</td>
+                <td>@transaction.TransactionType</td>
+                <td>@transaction.Quantity</td>
+                <td>@transaction.Timestamp.ToString("g")</td>
+                <td>@transaction.PerformedBy?.UserName</td>
+                <td>@transaction.Notes</td>
+            </tr>
+        }
+    </tbody>
+</table>

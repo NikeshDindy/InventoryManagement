@@ -11,15 +11,16 @@ namespace InventoryManagement.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-
+        private ILogger<AccountController> _logger;
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager, ILogger<AccountController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
+            _logger = logger;
         }
 
         // GET: /Account/Register
@@ -85,6 +86,7 @@ namespace InventoryManagement.Controllers
         public async Task<IActionResult> Login(LoginViewModel model, string? returnUrl = null)
         {
             if (!ModelState.IsValid)
+
                 return View(model);
 
             var result = await _signInManager.PasswordSignInAsync(
@@ -95,9 +97,14 @@ namespace InventoryManagement.Controllers
                 var user = await _userManager.FindByEmailAsync(model.Email);
                 var roles = await _userManager.GetRolesAsync(user);
 
+                _logger.LogInformation($"✅ User {model.Email} logged in successfully as {string.Join(",", roles)}.");
+
                 // Redirect according to role
-                if (roles.Contains("Admin"))
+                if (roles.Contains("Admin")) {
+                    _logger.LogInformation("-----------admin dashborard entering-----------");
                     return RedirectToAction("AdminDashboard", "Home");
+                }
+                    
                 else if (roles.Contains("Manager"))
                     return RedirectToAction("ManagerDashboard", "Home");
                 else if (roles.Contains("Staff"))
@@ -105,7 +112,7 @@ namespace InventoryManagement.Controllers
                 else
                     return RedirectToAction("Index", "Home");
             }
-
+            _logger.LogInformation("-----------out the dashborads-----------");
             ModelState.AddModelError(string.Empty, "Invalid login attempt.");
             return View(model);
         }

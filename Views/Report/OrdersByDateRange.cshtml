@@ -1,0 +1,31 @@
+﻿@model IEnumerable<InventoryManagement.Models.Order>
+
+@{
+    ViewData["Title"] = "Orders By Date Range";
+}
+
+<h2>Orders By Date Range</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Order Number</th>
+            <th>Order Type</th>
+            <th>Status</th>
+            <th>Created At</th>
+            <th>Total Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            <tr>
+                <td>@order.OrderNumber</td>
+                <td>@order.OrderType</td>
+                <td>@order.Status</td>
+                <td>@order.CreatedAt.ToString("d")</td>
+                <td>@order.TotalAmount.ToString("C")</td>
+            </tr>
+        }
+    </tbody>
+</table>

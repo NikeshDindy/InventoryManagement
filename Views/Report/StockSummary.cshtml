@@ -1,0 +1,33 @@
+﻿@model IEnumerable<InventoryManagement.Models.Product>
+
+@{
+    ViewData["Title"] = "Stock Summary";
+}
+
+<h2>Stock Summary</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>SKU</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Supplier</th>
+            <th>Stock Quantity</th>
+            <th>Low Stock Threshold</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>@product.SKU</td>
+                <td>@product.Name</td>
+                <td>@product.Category?.Name</td>
+                <td>@product.Supplier?.Name</td>
+                <td>@product.StockQuantity</td>
+                <td>@product.LowStockThreshold</td>
+            </tr>
+        }
+    </tbody>
+</table>

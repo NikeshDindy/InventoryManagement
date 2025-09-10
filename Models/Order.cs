@@ -42,7 +42,7 @@ namespace InventoryManagement.Models
         public ICollection<OrderDetail> OrderDetails { get; set; }
 
         public ICollection<InventoryTransaction> InventoryTransactions { get; set; }
-
+    
     }
 }
 

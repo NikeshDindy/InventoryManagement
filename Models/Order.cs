@@ -1,23 +1,49 @@
-﻿namespace InventoryManagement.Models
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace InventoryManagement.Models
 {
     public class Order
     {
+        [Key]
         public int OrderId { get; set; }
-        public string OrderNumber { get; set; }
-        public string OrderType { get; set; }  // "Purchase" or "Sales"
-        public string Status { get; set; }     // Pending, Fulfilled, Cancelled
-        public DateTime CreatedAt { get; set; }
+
+        [Required, StringLength(20)]
+        public string OrderNumber { get; set; } = string.Empty;
+
+        [Required, StringLength(20)]
+        public string OrderType { get; set; } = string.Empty;
+        // "Purchase" or "Sales"
+
+        [Required, StringLength(20)]
+        public string Status { get; set; } = "Pending";
+        // Pending, Fulfilled, Cancelled
+
+        [DataType(DataType.DateTime)]
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        [Column(TypeName = "decimal(18,2)")]
+        [Range(0, double.MaxValue, ErrorMessage = "Total must be positive")]
         public decimal TotalAmount { get; set; }
 
-        public string CreatedByUserId { get; set; }
+        // User who created the order
+        [Required]
+        public string CreatedByUserId { get; set; } = string.Empty;
+
+        [ForeignKey(nameof(CreatedByUserId))]
         public ApplicationUser CreatedBy { get; set; }
 
-        public int? SupplierId { get; set; }   // Only for Purchase Orders
+        // Supplier only applies to Purchase orders
+        public int? SupplierId { get; set; }
+
+        [ForeignKey(nameof(SupplierId))]
         public Supplier? Supplier { get; set; }
 
-        public ICollection<OrderDetail> OrderDetails { get; set; }
+        // Navigation property for order details
+        public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
     }
 }
+
 
 
 // functionality of models

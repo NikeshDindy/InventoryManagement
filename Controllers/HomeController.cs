@@ -9,14 +9,18 @@ namespace InventoryManagement.Controllers
     {
         public IActionResult Index()
         {
-            if (User.IsInRole("Admin"))
-                return RedirectToAction("AdminDashboard");
+            if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                if (User.IsInRole("Admin"))
+                    return RedirectToAction("AdminDashboard");
 
-            if (User.IsInRole("Manager"))
-                return RedirectToAction("ManagerDashboard");
+                if (User.IsInRole("Manager"))
+                    return RedirectToAction("ManagerDashboard");
 
-            if (User.IsInRole("Staff"))
-                return RedirectToAction("StaffDashboard");
+                if (User.IsInRole("Staff"))
+                    return RedirectToAction("StaffDashboard");
+
+            }
 
             return View();
         }

@@ -1,8 +1,79 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Inventory Management System";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-5">
+
+    <!-- Hero Section -->
+    <section class="text-center p-5 bg-light rounded shadow-sm mb-5">
+        <h1 class="display-4">Welcome to Inventory Management System</h1>
+        <p class="lead">A simple and powerful platform to manage products, suppliers, orders, and transactions efficiently.</p>
+    </section>
+
+    <!-- Features Section -->
+    <section class="row mb-5">
+        <div class="col-md-4 d-flex">
+            <div class="card shadow-sm p-4 w-100 h-100">
+                <h3>Product Management</h3>
+                <p>Easily add, update, and categorize products with stock levels and low-stock alerts.</p>
+            </div>
+        </div>
+        <div class="col-md-4 d-flex">
+            <div class="card shadow-sm p-4 w-100 h-100">
+                <h3>Order Tracking</h3>
+                <p>Track purchase and sales orders with detailed order histories and statuses.</p>
+            </div>
+        </div>
+        <div class="col-md-4 d-flex">
+            <div class="card shadow-sm p-4 w-100 h-100">
+                <h3>Supplier Management</h3>
+                <p>Manage supplier details and link them to purchase orders for better organization.</p>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- About Section -->
+    <section class="p-5 bg-light rounded shadow-sm mb-5">
+        <h2>About This System</h2>
+        <p>
+            The Inventory Management System is designed for businesses to simplify their stock control.
+            With features like real-time stock updates, role-based dashboards (Admin, Manager, Staff),
+            and detailed transaction logs, you’ll always be in control of your inventory.
+        </p>
+    </section>
+
+    <!-- User Roles Section -->
+    <section class="p-5 mb-5 bg-light rounded shadow-sm">
+        <h2 class="text-center mb-4">Role-Based Access</h2>
+        <div class="row">
+            <div class="col-md-4 d-flex">
+                <div class="card shadow-sm p-3 w-100 h-100 text-center">
+                    <h4>Admin</h4>
+                    <p>Manage users, roles, and system settings.</p>
+                </div>
+            </div>
+            <div class="col-md-4 d-flex">
+                <div class="card shadow-sm p-3 w-100 h-100 text-center">
+                    <h4>Manager</h4>
+                    <p>Oversee orders, suppliers, and inventory reports.</p>
+                </div>
+            </div>
+            <div class="col-md-4 d-flex">
+                <div class="card shadow-sm p-3 w-100 h-100 text-center">
+                    <h4>Staff</h4>
+                    <p>Record transactions and update product stock levels.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Contact / Footer Section -->
+    <section class="text-center p-4 bg-dark text-white rounded">
+        <h4>Get Started Today!</h4>
+        <p>Manage your inventory smarter and faster.</p>
+        <small>&copy; @DateTime.Now.Year Inventory Management System</small>
+    </section>
 </div>

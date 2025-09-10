@@ -16,6 +16,8 @@
         public Supplier? Supplier { get; set; }
 
         public ICollection<OrderDetail> OrderDetails { get; set; }
+
+        public ICollection<InventoryTransaction> InventoryTransactions { get; set; }
     }
 }
 

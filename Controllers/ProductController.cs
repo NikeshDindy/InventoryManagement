@@ -66,7 +66,7 @@ public class ProductController : Controller
     [Authorize(Roles = "Admin,Manager")]
     public async Task<IActionResult> Edit(int id, Product product)
     {
-        if (id != product.Id) return BadRequest();
+        if (id != product.ProductId) return BadRequest();
 
         if (ModelState.IsValid)
         {

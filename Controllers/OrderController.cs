@@ -33,8 +33,10 @@ namespace InventoryManagement.Controllers
         }
 
         // GET: Order/CreatePurchaseOrder
-        public IActionResult CreatePurchaseOrder()
+        public async Task<IActionResult> CreatePurchaseOrder()
         {
+            var suppliers = await _unitOfWork.Suppliers.GetAllAsync(); //allows the Razor view to render a dropdown list of available suppliers
+            ViewBag.Suppliers = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(suppliers, "SupplierId", "Name");
             // Render purchase order creation form
             return View();
         }
@@ -50,6 +52,9 @@ namespace InventoryManagement.Controllers
                 await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
+            // If invalid, repopulate suppliers for the dropdown
+            var suppliers = await _unitOfWork.Suppliers.GetAllAsync();
+            ViewBag.Suppliers = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(suppliers, "SupplierId", "Name");
             return View(order);
         }
 

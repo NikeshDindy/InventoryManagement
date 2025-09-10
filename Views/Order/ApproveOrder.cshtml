@@ -1,0 +1,12 @@
+﻿@model InventoryManagement.Models.Order
+@{
+    ViewData["Title"] = "Approve Order";
+}
+<h2>Approve Order - @Model.OrderNumber</h2>
+<p>Are you sure you want to approve this order?</p>
+
+<form asp-action="ApproveOrder" method="post">
+    <input type="hidden" asp-for="OrderId" />
+    <button type="submit" class="btn btn-success">Yes, Approve</button>
+    <a asp-action="Details" asp-route-id="@Model.OrderId" class="btn btn-secondary">Cancel</a>
+</form>

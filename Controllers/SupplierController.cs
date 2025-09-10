@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace InventoryManagement.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,Manager,Staff")]
     public class SupplierController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -16,14 +16,17 @@ namespace InventoryManagement.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        // GET: Suppliers
+        // =======================
+        // VIEW SUPPLIERS (All roles)
+        // =======================
+        [Authorize(Roles = "Admin,Manager,Staff")]
         public async Task<IActionResult> Index()
         {
             var suppliers = await _unitOfWork.Suppliers.GetAllAsync();
             return View(suppliers);
         }
 
-        // GET: Suppliers/Details/5
+        [Authorize(Roles = "Admin,Manager,Staff")]
         public async Task<IActionResult> Details(int id)
         {
             var supplier = await _unitOfWork.Suppliers.GetByIdAsync(id);
@@ -34,15 +37,18 @@ namespace InventoryManagement.Controllers
             return View(supplier);
         }
 
-        // GET: Suppliers/Create
+        // =======================
+        // CREATE SUPPLIER (Admin, Manager)
+        // =======================
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Suppliers/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Create([Bind("SupplierId,Name,ContactInfo")] Supplier supplier)
         {
             if (ModelState.IsValid)
@@ -54,7 +60,10 @@ namespace InventoryManagement.Controllers
             return View(supplier);
         }
 
-        // GET: Suppliers/Edit/5
+        // =======================
+        // EDIT SUPPLIER (Admin, Manager)
+        // =======================
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Edit(int id)
         {
             var supplier = await _unitOfWork.Suppliers.GetByIdAsync(id);
@@ -65,9 +74,9 @@ namespace InventoryManagement.Controllers
             return View(supplier);
         }
 
-        // POST: Suppliers/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Edit(int id, [Bind("SupplierId,Name,ContactInfo")] Supplier supplier)
         {
             if (id != supplier.SupplierId)
@@ -82,7 +91,10 @@ namespace InventoryManagement.Controllers
             return View(supplier);
         }
 
-        // GET: Suppliers/Delete/5
+        // =======================
+        // DELETE SUPPLIER (Admin only)
+        // =======================
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var supplier = await _unitOfWork.Suppliers.GetByIdAsync(id);
@@ -93,9 +105,9 @@ namespace InventoryManagement.Controllers
             return View(supplier);
         }
 
-        // POST: Suppliers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var supplier = await _unitOfWork.Suppliers.GetByIdAsync(id);

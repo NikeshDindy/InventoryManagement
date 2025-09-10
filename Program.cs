@@ -1,5 +1,6 @@
 using InventoryManagement.Data;
 using InventoryManagement.Models;
+using InventoryManagement.Repositories;
 using InventoryManagement.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -19,6 +20,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // ?? Add Identity
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
 var key = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]);

@@ -32,6 +32,7 @@ namespace InventoryManagement.Service
                 {
                     UserName = adminEmail,
                     Email = adminEmail,
+                    FullName = "System Administrator",
                     EmailConfirmed = true
                 };
 
@@ -39,6 +40,13 @@ namespace InventoryManagement.Service
                 if (result.Succeeded)
                 {
                     await userManager.AddToRoleAsync(newAdmin, "Admin");
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        Console.WriteLine($"❌ Admin creation failed: {error.Description}");
+                    }
                 }
             }
         }

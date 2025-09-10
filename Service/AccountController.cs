@@ -70,7 +70,7 @@ namespace InventoryManagement.Controllers
             await _userManager.AddToRoleAsync(user, model.Role);
 
             TempData["Success"] = "User registered successfully!";
-            return RedirectToAction("Login");
+            return RedirectToAction("AdminDashboard", "Home");
         }
 
         // GET: /Account/Login

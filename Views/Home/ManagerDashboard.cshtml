@@ -257,6 +257,28 @@
     </div>
 </div>
 
+@{
+    // safely compute the display name on the server
+    var email = User?.Identity?.Name ?? "";
+    // get the part before '@'
+    var username = email.Contains("@") ? email.Split('@')[0] : email;
+
+    // take only the first token before dot/underscore/hyphen (e.g. "banti.mandal" -> "banti")
+    var separators = new char[] { '.', '_', '-' };
+    var tokenIndex = username.IndexOfAny(separators);
+    var firstName = tokenIndex >= 0 ? username.Substring(0, tokenIndex) : username;
+
+    // capitalize first letter
+    if (!string.IsNullOrWhiteSpace(firstName))
+    {
+        firstName = char.ToUpper(firstName[0]) + (firstName.Length > 1 ? firstName.Substring(1) : "");
+    }
+    else
+    {
+        firstName = "User";
+    }
+}
+
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
@@ -293,15 +315,20 @@
     body.classList.add("light-mode");
 
     // Greeting & Clock
+    // Inject server-computed name as a JSON string (safe escaping)
+    const userName = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(firstName));
+
+    // Greeting & Live Clock
     function updateClock() {
         const now = new Date();
         document.getElementById("liveClock").innerText = now.toLocaleTimeString();
 
         const hour = now.getHours();
-        let greetingText = "Hello Manager!";
-        if (hour < 12) greetingText = "🌅 Good Morning, Manager!";
-        else if (hour < 18) greetingText = "☀️ Good Afternoon, Manager!";
-        else greetingText = "🌙 Good Evening, Manager!";
+        let greetingText = `Hello, ${userName}!`;
+        if (hour < 12) greetingText = `🌅 Good Morning, ${userName}!`;
+        else if (hour < 18) greetingText = `☀️ Good Afternoon, ${userName}!`;
+        else greetingText = `🌙 Good Evening, ${userName}!`;
+
         document.getElementById("greeting").innerText = greetingText;
     }
     setInterval(updateClock, 1000);

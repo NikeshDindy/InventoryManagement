@@ -39,8 +39,8 @@
                 <td>@order.CreatedAt.ToShortDateString()</td>
                 <td>@order.TotalAmount.ToString("C")</td>
                 <td>
-                    
-                    @if (User.IsInRole("Manager") && order.Status == "Pending")
+
+                    @if ((User.IsInRole("Manager") || (User.IsInRole("Admin"))) && order.Status == "Pending")
                     {
                         <a asp-action="ApproveOrder" asp-route-id="@order.OrderId" class="ms-2">Approve</a>
                     }

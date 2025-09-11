@@ -3,12 +3,168 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+<style>
+    /* Light & Dark Theme Base */
+    body.light-mode {
+        background-color: #f8f9fa;
+        color: #212529;
+    }
+
+    body.dark-mode {
+        background-color: #121212;
+        color: #e0e0e0;
+    }
+
+    /* Dashboard Title */
+    h2 {
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
+
+    /* Card Styles */
+    .card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease, color 0.3s ease;
+        border-radius: 15px;
+    }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+    body.dark-mode .card {
+        background: #1e1e1e;
+        color: #e0e0e0;
+    }
+
+    .card-body i {
+        transition: transform 0.3s ease;
+    }
+
+    .card:hover i {
+        transform: scale(1.2);
+    }
+
+    .card-body .btn {
+        border-radius: 20px;
+        font-size: 0.85rem;
+        padding: 6px 14px;
+    }
+    /* Text Muted for Dark Mode */
+    body.dark-mode .text-muted {
+        color: #f5f5f5 !important; /* soft white */
+    }
+
+    /* Dark Mode Adjustments */
+    body.dark-mode .btn-outline-primary {
+        color: #90caf9;
+        border-color: #90caf9;
+    }
+
+        body.dark-mode .btn-outline-primary:hover {
+            background: #90caf9;
+            color: #121212;
+        }
+
+    /* Toggle Button */
+    .dark-mode-toggle {
+        float: right;
+        margin-top: -15px;
+        margin-right: 15px;
+    }
+
+        .dark-mode-toggle button {
+            border: none;
+            background: transparent;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #555;
+        }
+
+    body.dark-mode .dark-mode-toggle button {
+        color: #f5f5f5;
+    }
+
+    /* Timeline */
+    .timeline {
+        list-style: none;
+        padding-left: 10px;
+        position: relative;
+    }
+
+        .timeline li {
+            margin-bottom: 12px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+            .timeline li::before {
+                content: "•";
+                color: #007bff;
+                position: absolute;
+                left: 0;
+                font-size: 20px;
+                top: -2px;
+            }
+
+    /* Counter Styles */
+    .counter {
+        font-size: 1.8rem;
+        font-weight: bold;
+    }
+</style>
+
 <div class="container-fluid mt-4">
-    <h2 class="mb-4 text-primary"><i class="fas fa-user-tie"></i> Manager Dashboard</h2>
-    <div class="row g-4">
+    <div class="d-flex justify-content-between align-items-center">
+        <h2 class="mb-4 text-primary"><i class="fas fa-user-tie"></i> Manager Dashboard</h2>
+        <div class="dark-mode-toggle">
+            <button id="toggleDarkMode" title="Toggle Dark Mode">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Greeting & Clock -->
+    <div class="alert alert-info shadow-sm">
+        <h5 id="greeting"></h5>
+        <p><i class="fas fa-clock"></i> <span id="liveClock"></span></p>
+    </div>
+
+    <!-- Animated Counters -->
+    <div class="row g-4 mt-2">
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 text-center p-3">
+                <h6 class="text-primary"><i class="fas fa-clipboard-list"></i> Orders</h6>
+                <h3 class="counter" data-target="124">0</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 text-center p-3">
+                <h6 class="text-success"><i class="fas fa-truck"></i> Suppliers</h6>
+                <h3 class="counter" data-target="35">0</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 text-center p-3">
+                <h6 class="text-warning"><i class="fas fa-box-open"></i> Products</h6>
+                <h3 class="counter" data-target="88">0</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 text-center p-3">
+                <h6 class="text-danger"><i class="fas fa-exchange-alt"></i> Transactions</h6>
+                <h3 class="counter" data-target="212">0</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- First Row -->
+    <div class="row g-4 mt-4">
         <!-- Orders -->
         <div class="col-lg-3 col-md-6">
-            <div class="card shadow-sm border-0 bg-light h-100">
+            <div class="card shadow-sm border-0 h-100">
                 <div class="card-body text-center">
                     <i class="fas fa-clipboard-list fa-2x text-primary mb-3"></i>
                     <h5 class="card-title">Orders</h5>
@@ -18,9 +174,10 @@
                 </div>
             </div>
         </div>
+
         <!-- Suppliers -->
         <div class="col-lg-3 col-md-6">
-            <div class="card shadow-sm border-0 bg-light h-100">
+            <div class="card shadow-sm border-0 h-100">
                 <div class="card-body text-center">
                     <i class="fas fa-truck fa-2x text-success mb-3"></i>
                     <h5 class="card-title">Suppliers</h5>
@@ -29,9 +186,10 @@
                 </div>
             </div>
         </div>
+
         <!-- Products -->
         <div class="col-lg-3 col-md-6">
-            <div class="card shadow-sm border-0 bg-light h-100">
+            <div class="card shadow-sm border-0 h-100">
                 <div class="card-body text-center">
                     <i class="fas fa-box-open fa-2x text-warning mb-3"></i>
                     <h5 class="card-title">Products</h5>
@@ -40,9 +198,10 @@
                 </div>
             </div>
         </div>
+
         <!-- Transactions -->
         <div class="col-lg-3 col-md-6">
-            <div class="card shadow-sm border-0 bg-light h-100">
+            <div class="card shadow-sm border-0 h-100">
                 <div class="card-body text-center">
                     <i class="fas fa-exchange-alt fa-2x text-danger mb-3"></i>
                     <h5 class="card-title">Transactions</h5>
@@ -52,7 +211,8 @@
             </div>
         </div>
     </div>
-    <!-- Reports and Profile Row -->
+
+    <!-- Second Row -->
     <div class="row g-4 mt-3">
         <!-- Reports -->
         <div class="col-lg-6">
@@ -64,20 +224,39 @@
                 </div>
             </div>
         </div>
+
         <!-- Profile -->
         <div class="col-lg-6">
             <div class="card shadow-sm border-0 h-100">
                 <div class="card-body text-center">
                     <i class="fas fa-user-circle fa-3x text-secondary mb-3"></i>
-                    <h5 class="card-title">My Profile</h5> 
+                    <h5 class="card-title">My Profile</h5>
                     <p>@User.Identity.Name</p>
                     <p class="text-muted">Update account information and password.</p>
                     <a href="@Url.Action("Manage", "Account")" class="btn btn-secondary btn-sm">Edit Profile</a>
-                </div>     @* till now manage action is not being created inside account controller   *@
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Third Row -->
+    <div class="row g-4 mt-3">
+        <div class="col-lg-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-history text-secondary"></i> Recent Activity</h5>
+                    <ul class="timeline">
+                        <li><span>✔️ Order #123 approved</span> <small>2 mins ago</small></li>
+                        <li><span>📦 New product added: Laptop</span> <small>10 mins ago</small></li>
+                        <li><span>👤 Supplier "ABC Traders" updated</span> <small>30 mins ago</small></li>
+                        <li><span>💰 Purchase Order #98 created</span> <small>1 hr ago</small></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
@@ -96,5 +275,53 @@
                 backgroundColor: 'rgba(255, 99, 132, 0.7)'
             }]
         }
+    });
+
+    // Dark Mode Toggle
+    const body = document.body;
+    const toggleBtn = document.getElementById("toggleDarkMode");
+
+    toggleBtn.addEventListener("click", () => {
+        body.classList.toggle("dark-mode");
+        body.classList.toggle("light-mode");
+        toggleBtn.innerHTML = body.classList.contains("dark-mode")
+            ? '<i class="fas fa-sun"></i>'
+            : '<i class="fas fa-moon"></i>';
+    });
+
+    // Default to light mode
+    body.classList.add("light-mode");
+
+    // Greeting & Clock
+    function updateClock() {
+        const now = new Date();
+        document.getElementById("liveClock").innerText = now.toLocaleTimeString();
+
+        const hour = now.getHours();
+        let greetingText = "Hello Manager!";
+        if (hour < 12) greetingText = "🌅 Good Morning, Manager!";
+        else if (hour < 18) greetingText = "☀️ Good Afternoon, Manager!";
+        else greetingText = "🌙 Good Evening, Manager!";
+        document.getElementById("greeting").innerText = greetingText;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Counter Animation
+    const counters = document.querySelectorAll('.counter');
+    counters.forEach(counter => {
+        counter.innerText = '0';
+        const updateCounter = () => {
+            const target = +counter.getAttribute('data-target');
+            const count = +counter.innerText;
+            const increment = target / 200;
+            if (count < target) {
+                counter.innerText = Math.ceil(count + increment);
+                setTimeout(updateCounter, 10);
+            } else {
+                counter.innerText = target;
+            }
+        };
+        updateCounter();
     });
 </script>

@@ -49,7 +49,7 @@ namespace InventoryManagement.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,Manager")]
-        public async Task<IActionResult> Create([Bind("SupplierId,Name,ContactInfo")] Supplier supplier)
+        public async Task<IActionResult> Create([Bind("SupplierId,Name,ContactInfo,Address")] Supplier supplier)
         {
             if (ModelState.IsValid)
             {
@@ -77,7 +77,7 @@ namespace InventoryManagement.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,Manager")]
-        public async Task<IActionResult> Edit(int id, [Bind("SupplierId,Name,ContactInfo")] Supplier supplier)
+        public async Task<IActionResult> Edit(int id, [Bind("SupplierId,Name,ContactInfo,Address")] Supplier supplier)
         {
             if (id != supplier.SupplierId)
                 return NotFound();
@@ -105,18 +105,23 @@ namespace InventoryManagement.Controllers
             return View(supplier);
         }
 
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed([FromForm] int id)
         {
+            Console.WriteLine($"===================================entered delete confirm{id}");
             var supplier = await _unitOfWork.Suppliers.GetByIdAsync(id);
+            
             if (supplier != null)
             {
+                Console.WriteLine("==================================supllier is not null");
                 _unitOfWork.Suppliers.Remove(supplier);
                 await _unitOfWork.CompleteAsync();
             }
+            Console.WriteLine("===================================supllier is null");
             return RedirectToAction(nameof(Index));
         }
+
     }
 }

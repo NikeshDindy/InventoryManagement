@@ -1,8 +1,9 @@
 ﻿using InventoryManagement.Models;
 using InventoryManagement.Repositories;
-using InventoryManagement.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Threading.Tasks;
 
 [Authorize(Roles = "Admin,Manager,Staff")]
 public class ProductController : Controller
@@ -14,7 +15,7 @@ public class ProductController : Controller
         _unitOfWork = unitOfWork;
     }
 
-    // GET: Product/Index
+    // GET: Product
     public async Task<IActionResult> Index()
     {
         var products = await _unitOfWork.Products.GetAllAsync();
@@ -31,8 +32,10 @@ public class ProductController : Controller
 
     // GET: Product/Create
     [Authorize(Roles = "Admin,Manager")]
-    public IActionResult Create()
+    public async Task<IActionResult> Create()
     {
+        ViewBag.Categories = new SelectList(await _unitOfWork.Categories.GetAllAsync(), "CategoryId", "Name");
+        ViewBag.Suppliers = new SelectList(await _unitOfWork.Suppliers.GetAllAsync(), "SupplierId", "Name");
         return View();
     }
 
@@ -48,6 +51,8 @@ public class ProductController : Controller
             await _unitOfWork.CompleteAsync();
             return RedirectToAction(nameof(Index));
         }
+        ViewBag.Categories = new SelectList(await _unitOfWork.Categories.GetAllAsync(), "CategoryId", "Name", product.CategoryId);
+        ViewBag.Suppliers = new SelectList(await _unitOfWork.Suppliers.GetAllAsync(), "SupplierId", "Name", product.SupplierId);
         return View(product);
     }
 
@@ -57,6 +62,8 @@ public class ProductController : Controller
     {
         var product = await _unitOfWork.Products.GetByIdAsync(id);
         if (product == null) return NotFound();
+        ViewBag.Categories = new SelectList(await _unitOfWork.Categories.GetAllAsync(), "CategoryId", "Name", product.CategoryId);
+        ViewBag.Suppliers = new SelectList(await _unitOfWork.Suppliers.GetAllAsync(), "SupplierId", "Name", product.SupplierId);
         return View(product);
     }
 
@@ -74,6 +81,8 @@ public class ProductController : Controller
             await _unitOfWork.CompleteAsync();
             return RedirectToAction(nameof(Index));
         }
+        ViewBag.Categories = new SelectList(await _unitOfWork.Categories.GetAllAsync(), "CategoryId", "Name", product.CategoryId);
+        ViewBag.Suppliers = new SelectList(await _unitOfWork.Suppliers.GetAllAsync(), "SupplierId", "Name", product.SupplierId);
         return View(product);
     }
 
@@ -94,7 +103,6 @@ public class ProductController : Controller
     {
         var product = await _unitOfWork.Products.GetByIdAsync(id);
         if (product == null) return NotFound();
-
         _unitOfWork.Products.Remove(product);
         await _unitOfWork.CompleteAsync();
         return RedirectToAction(nameof(Index));

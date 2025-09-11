@@ -1,4 +1,4 @@
-﻿@model IEnumerable<InventoryManagement.Models.Product>
+﻿@model IEnumerable<InventoryManagement.ViewModels.ProductDto>
 @{
     ViewData["Title"] = "Products";
 }
@@ -34,8 +34,8 @@
                         <span class="badge bg-danger ms-2">Low</span>
                     }
                 </td>
-                <td>@item.Category?.Name</td>
-                <td>@item.Supplier?.Name</td>
+                <td>@item.CategoryName</td>
+                <td>@item.SupplierName</td>
                 <td>
                     <a asp-action="Details" asp-route-id="@item.ProductId" class="btn btn-sm btn-info">Details</a>
                     <a asp-action="Edit" asp-route-id="@item.ProductId" class="btn btn-sm btn-warning text-white ms-1">Edit</a>

@@ -1,10 +1,10 @@
-﻿@model InventoryManagement.Models.Product
+﻿@model InventoryManagement.ViewModels.CreateProductDto
 @{
     ViewData["Title"] = "Create Product";
 }
 <h2>Create Product</h2>
 <form asp-action="Create" method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    @* <div asp-validation-summary="ModelOnly" class="text-danger"></div> *@
     <div class="mb-3">
         <label asp-for="SKU" class="form-label"></label>
         <input asp-for="SKU" class="form-control" />

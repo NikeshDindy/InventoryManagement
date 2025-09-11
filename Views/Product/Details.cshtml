@@ -1,4 +1,4 @@
-﻿@model InventoryManagement.Models.Product
+﻿@model InventoryManagement.ViewModels.ProductDto
 @{
     ViewData["Title"] = "Product Details";
 }
@@ -18,9 +18,9 @@
         <dt class="col-sm-3">Low Stock Threshold</dt>
         <dd class="col-sm-9">@Model.LowStockThreshold</dd>
         <dt class="col-sm-3">Category</dt>
-        <dd class="col-sm-9">@Model.Category?.Name</dd>
+        <dd class="col-sm-9">@Model.CategoryName</dd>
         <dt class="col-sm-3">Supplier</dt>
-        <dd class="col-sm-9">@Model.Supplier?.Name</dd>
+        <dd class="col-sm-9">@Model.SupplierName</dd>
     </dl>
     <a asp-action="Edit" asp-route-id="@Model.ProductId" class="btn btn-primary">Edit</a>
     <a asp-action="Index" class="btn btn-secondary">Back</a>

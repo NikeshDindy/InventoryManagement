@@ -52,6 +52,39 @@
                 </div>
             </div>
         </div>
+        <div class="row g-4 mt-4">
+            <!--Products-->
+            <div class="col-md-3">
+                <div class="card text-white bg-primary h-100">
+                    <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                        <h5 class="card-title">Products</h5>
+                        <p class="card-text">Browse available products and stock levels.</p>
+                        <a asp-controller="Product" asp-action="Index" class="btn btn-light mt-2">View</a>
+                    </div>
+                </div>
+            </div>
+            <!--Orders-->
+            <div class="col-md-3">
+                <div class="card text-white bg-warning h-100">
+                    <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                        <h5 class="card-title">Orders</h5>
+                        <p class="card-text">View all purchase and sales orders.</p>
+                        <a asp-controller="Order" asp-action="Index" class="btn btn-light mt-2">View</a>
+                    </div>
+                </div>
+            </div>
+            <!--Transactions-->
+            <div class="col-md-3">
+                <div class="card text-white bg-dark h-100">
+                    <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                        <h5 class="card-title">Transactions</h5>
+                        <p class="card-text">View all inventory transactions.</p>
+                        <a asp-controller="Transaction" asp-action="Index" class="btn btn-light mt-2">View</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
     </div>
 </div>
 

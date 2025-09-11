@@ -3,6 +3,7 @@ using InventoryManagement.Repositories;
 using InventoryManagement.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using System.Threading.Tasks;
 
 namespace InventoryManagement.Controllers
@@ -82,6 +83,7 @@ namespace InventoryManagement.Controllers
         // POST: /Category/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Edit(int id, CategoryEditDto dto)
         {
             if (id != dto.CategoryId) return BadRequest();

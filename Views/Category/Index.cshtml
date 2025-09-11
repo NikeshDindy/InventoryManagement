@@ -41,8 +41,15 @@
                 <td>@category.Description</td>
                 <td>
                     <a asp-action="Details" asp-route-id="@category.CategoryId" class="btn btn-info btn-sm">Details</a>
-                    <a asp-action="Edit" asp-route-id="@category.CategoryId" class="btn btn-success btn-sm">Edit</a>
-                    <a asp-action="Delete" asp-route-id="@category.CategoryId" class="btn btn-danger btn-sm">Delete</a>
+                    @if (User.IsInRole("Manager") || User.IsInRole("Admin"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@category.CategoryId" class="btn btn-success btn-sm">Edit</a>
+                    }
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-action="Delete" asp-route-id="@category.CategoryId" class="btn btn-danger btn-sm">Delete</a>
+                    }
+                    
                 </td>
             </tr>
         }

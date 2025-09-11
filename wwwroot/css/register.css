@@ -1,0 +1,130 @@
+﻿/* ===============================
+   Register Page - Modern SaaS Style (Scoped)
+   =============================== */
+
+/* Full screen wrapper with animated gradient */
+.register-page-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 1rem;
+    background: linear-gradient(-45deg, #0d6efd, #0dcaf0, #6610f2, #6f42c1);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+}
+
+@keyframes gradientBG {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Form container */
+.register-page-wrapper .register-form {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 2.5rem 2rem;
+    border-radius: 20px;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(12px);
+    width: 100%;
+    max-width: 500px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .register-page-wrapper .register-form:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Heading */
+    .register-page-wrapper .register-form h2 {
+        text-align: center;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 2rem;
+        color: #6610f2;
+        position: relative;
+    }
+
+        .register-page-wrapper .register-form h2::before {
+            content: "📝 ";
+        }
+
+    /* Form groups */
+    .register-page-wrapper .register-form .form-group {
+        position: relative;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Input and select fields */
+    .register-page-wrapper .register-form .form-control,
+    .register-page-wrapper .register-form .form-select {
+        border-radius: 12px;
+        border: 1px solid #ddd;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+        .register-page-wrapper .register-form .form-control:focus,
+        .register-page-wrapper .register-form .form-select:focus {
+            border-color: #6610f2;
+            box-shadow: 0 0 0 0.2rem rgba(102, 16, 242, 0.25);
+            outline: none;
+        }
+
+    /* Labels */
+    .register-page-wrapper .register-form .form-label {
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 6px;
+    }
+
+    /* Button */
+    .register-page-wrapper .register-form .btn-primary {
+        width: 100%;
+        padding: 0.75rem 0;
+        border-radius: 12px;
+        font-weight: 600;
+        background: linear-gradient(90deg, #0dcaf0, #0d6efd);
+        border: none;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        font-size: 1.05rem;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .register-page-wrapper .register-form .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.15);
+        }
+
+    /* Alerts */
+    .register-page-wrapper .register-form .alert {
+        border-radius: 12px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        font-weight: 500;
+        margin-bottom: 20px;
+    }
+
+    /* Validation errors */
+    .register-page-wrapper .register-form .text-danger {
+        font-size: 0.875rem;
+    }
+
+/* Responsive tweaks */
+@media (max-width: 576px) {
+    .register-page-wrapper .register-form {
+        width: 95%;
+        padding: 2rem 1.5rem;
+    }
+}

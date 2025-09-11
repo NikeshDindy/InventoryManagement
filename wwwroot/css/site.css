@@ -1,31 +1,383 @@
+﻿/* ========================================
+   Inventory Management - Modern UI CSS
+   ======================================== */
+
+/* ===============================
+   Base Styles
+   =============================== */
 html {
-  font-size: 14px;
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+    html {
+        font-size: 16px;
+    }
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    font-family: "Segoe UI", Roboto, sans-serif;
+    transition: background 0.3s ease, color 0.3s ease;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+/* Smooth transitions for all elements */
+* {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+/* ===============================
+   Theme Variables
+   =============================== */
+
+/* Light theme */
+:root[data-bs-theme="light"] {
+    --bg-gradient: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    --card-gradient: linear-gradient(145deg, #ffffff, #f1f3f5);
+    --navbar-gradient: linear-gradient(90deg, #ffffff, #e3f2fd);
+    --footer-gradient: linear-gradient(90deg, #e3f2fd, #ffffff);
+    --text-color: #212529;
+    --link-color: #0d6efd;
+    --border-color: #dee2e6;
+    --shadow-color: rgba(0, 0, 0, 0.08);
+    --accent-color: #0dcaf0;
 }
+
+/* Dark theme */
+:root[data-bs-theme="dark"] {
+    --bg-gradient: #0d1117;
+    --card-gradient: rgba(32,32,40,0.9);
+    --navbar-gradient: linear-gradient(90deg,#1c1c1c,#111111);
+    --footer-gradient: linear-gradient(90deg,#111111,#1c1c1c);
+    --text-color: #e0e0e0;
+    --link-color: #66b2ff;
+    --border-color: rgba(255,255,255,0.15);
+    --shadow-color: rgba(0,0,0,0.6);
+    --accent-color: #0dcaf0;
+}
+
+    /* Override Bootstrap bg-white / bg-light in dark mode */
+    :root[data-bs-theme="dark"] .bg-white,
+    :root[data-bs-theme="dark"] .bg-light {
+        background-color: var(--card-gradient) !important;
+        color: var(--text-color) !important;
+    }
+
+/* ===============================
+   Global Styles
+   =============================== */
+body {
+    background: var(--bg-gradient) !important;
+    color: var(--text-color) !important;
+}
+
+/* ===============================
+   Navbar
+   =============================== */
+.navbar {
+    background: var(--navbar-gradient) !important;
+    box-shadow: 0 2px 8px var(--shadow-color);
+}
+
+    .navbar .navbar-brand {
+        color: var(--accent-color) !important;
+        font-weight: 600;
+    }
+
+    .navbar .nav-link {
+        color: var(--text-color) !important;
+        position: relative;
+        border-radius: 8px;
+        padding: 0.3rem 0.5rem;
+        transition: color 0.3s, background 0.3s, transform 0.3s;
+    }
+
+        .navbar .nav-link:hover {
+            color: var(--link-color) !important;
+            text-decoration: none !important;
+            background: rgba(13, 202, 240, 0.15);
+            transform: translateY(-2px);
+        }
+
+:root[data-bs-theme="dark"] .navbar .nav-link:hover {
+    background: rgba(102, 178, 255, 0.15);
+}
+
+/* ===============================
+   Footer
+   =============================== */
+.footer {
+    background: var(--footer-gradient) !important;
+    color: var(--text-color) !important;
+    border-top: 1px solid var(--border-color);
+    box-shadow: 0 -2px 6px var(--shadow-color);
+}
+
+/* ===============================
+   Buttons
+   =============================== */
+.btn-outline-secondary {
+    color: var(--text-color);
+    border-color: var(--accent-color);
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+    .btn-outline-secondary:hover {
+        background-color: var(--accent-color);
+        color: #fff;
+        transform: translateY(-1px);
+    }
+
+/* ===============================
+   Links
+   =============================== */
+a {
+    color: var(--link-color);
+}
+
+    a:hover {
+        text-decoration: underline;
+        opacity: 0.9;
+    }
+
+/* ===============================
+   Cards, Containers, Hero Sections
+   =============================== */
+.card,
+.jumbotron,
+.hero,
+.intro,
+.welcome-container {
+    background: var(--card-gradient) !important;
+    color: var(--text-color) !important;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px var(--shadow-color);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+    .welcome-container::before {
+        content: "🎉 ";
+        font-size: 1.5rem;
+    }
+
+.welcome-container {
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+/* ===============================
+   Tables
+   =============================== */
+.table {
+    background: var(--card-gradient) !important;
+    color: var(--text-color) !important;
+    box-shadow: 0 4px 12px var(--shadow-color);
+    border-radius: 10px;
+}
+
+    .table th,
+    .table td {
+        border-color: var(--border-color) !important;
+    }
+
+/* ===============================
+   Inputs and Focus
+   =============================== */
+.form-control:focus,
+.form-check-input:focus,
+.btn:focus,
+.btn-link:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    outline: none;
+}
+
+/* ===============================
+   Theme Toggle Button
+   =============================== */
+#themeToggle {
+    transition: transform 0.4s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+    #themeToggle:hover {
+        transform: rotate(20deg);
+        background-color: var(--accent-color);
+        color: #fff;
+    }
+
+/* ===============================
+   Responsive tweaks
+   =============================== */
+@media (max-width: 576px) {
+    .navbar .nav-link {
+        padding: 0.3rem 0.5rem;
+    }
+
+    .welcome-container {
+        font-size: 1rem;
+        padding: 1rem;
+    }
+}
+
+/* ===============================
+   Login Page - Modern Premium with Animated Background
+   =============================== */
+
+/* Full screen wrapper with animated gradient */
+.login-page-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 1rem;
+    background: linear-gradient(-45deg, #0d6efd, #0dcaf0, #6610f2, #6f42c1);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    transition: background 0.3s ease;
+}
+
+/* Animation keyframes */
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Login container */
+.login-container {
+    max-width: 500px;
+    width: 90%;
+    margin: 0;
+    padding: 2.5rem 2rem;
+    border-radius: 20px;
+    background: var(--card-gradient); /* keep card readable */
+    color: var(--text-color);
+    box-shadow: 0 12px 28px var(--shadow-color);
+    backdrop-filter: blur(12px);
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    z-index: 1;
+}
+
+.login-container:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 40px var(--shadow-color);
+}
+
+/* Header with icon */
+.login-container h2 {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: var(--link-color);
+    position: relative;
+}
+
+.login-container h2::before {
+    content: "🔒 ";
+}
+
+/* Form groups with icons */
+.form-group {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.form-group input {
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+    background: rgba(255,255,255,0.95);
+    color: var(--text-color);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+:root[data-bs-theme="dark"] .login-container input {
+    background: rgba(32,32,40,0.85);
+    color: var(--text-color);
+}
+
+/* Input icons */
+.form-group input#Email {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%2396A2B8' viewBox='0 0 16 16'%3E%3Cpath d='M0 4a2 2 0 012-2h12a2 2 0 012 2v.217l-8 4.8-8-4.8V4z'/%3E%3Cpath d='M0 5.383v6.617a2 2 0 002 2h12a2 2 0 002-2V5.383l-8 4.8-8-4.8z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: 10px center;
+    background-size: 1.2rem 1.2rem;
+}
+
+.form-group input#Password {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%2396A2B8' viewBox='0 0 16 16'%3E%3Cpath d='M8 1a4 4 0 00-4 4v2H3a1 1 0 00-1 1v7a1 1 0 001 1h10a1 1 0 001-1V8a1 1 0 00-1-1h-1V5a4 4 0 00-4-4zm-2 4a2 2 0 114 0v2H6V5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: 10px center;
+    background-size: 1.2rem 1.2rem;
+}
+
+/* Labels */
+.form-label {
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+/* Focus effect */
+.form-control:focus {
+    border-color: var(--link-color);
+    box-shadow: 0 0 0 0.2rem rgba(13,202,240,0.25);
+}
+
+/* Checkbox */
+.form-check-label {
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+/* Button */
+.login-container .btn-primary {
+    width: 100%;
+    padding: 0.7rem 0;
+    border-radius: 12px;
+    font-weight: 600;
+    background: linear-gradient(90deg, #0dcaf0, #0d6efd);
+    border: none;
+    box-shadow: 0 6px 16px var(--shadow-color);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    font-size: 1.05rem;
+}
+
+.login-container .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px var(--shadow-color);
+}
+
+/* Alerts */
+.login-container .alert {
+    border-radius: 12px;
+    box-shadow: 0 6px 18px var(--shadow-color);
+    text-align: center;
+    font-weight: 500;
+}
+
+/* Validation errors */
+.login-container .text-danger {
+    font-size: 0.875rem;
+}
+
+/* Responsive tweaks */
+@media (max-width: 576px) {
+    .login-container {
+        width: 95%;
+        padding: 1.8rem 1.5rem;
+    }
+}
+
+
+
+
+

@@ -1,21 +1,20 @@
 ﻿using InventoryManagement.Models;
 using InventoryManagement.Repositories;
+using InventoryManagement.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Threading.Tasks;
-
 namespace InventoryManagement.Controllers
 {
     [Authorize(Roles = "Admin,Manager,Staff")]
     public class OrderController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-
         public OrderController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
-
         // =======================
         // VIEW ORDERS
         // =======================
@@ -26,45 +25,82 @@ namespace InventoryManagement.Controllers
             return View(orders);
         }
 
+        // details
         [Authorize(Roles = "Admin,Manager,Staff")]
         public async Task<IActionResult> Details(int id)
         {
-            var order = await _unitOfWork.Orders.GetByIdAsync(id);
+            // Fetch order and eager-load related data
+            var order = await _unitOfWork.Orders.GetByIdAsync(
+                id,
+                includeProperties: "OrderDetails.Product,InventoryTransactions.Product,CreatedBy,Supplier"
+            );
+
             if (order == null)
                 return NotFound();
-            return View(order);
-        }
 
+            // Ensure collections are not null
+            order.OrderDetails = order.OrderDetails ?? new List<OrderDetail>();
+            order.InventoryTransactions = order.InventoryTransactions ?? new List<InventoryTransaction>();
+
+            // Map to DTO
+            var dto = new OrderDetailDto
+            {
+                OrderId = order.OrderId,
+                OrderNumber = order.OrderNumber,
+                OrderType = order.OrderType,
+                Status = order.Status,
+                TotalAmount = order.TotalAmount,
+                CreatedAt = order.CreatedAt,
+                CreatedByUserId = order.CreatedByUserId,
+                CreatedByName = order.CreatedBy?.UserName ?? "",
+                SupplierName = order.Supplier?.Name ?? "",
+                OrderDetails = order.OrderDetails,
+                InventoryTransactions = order.InventoryTransactions
+            };
+
+            return View(dto);
+        }
         // =======================
-        // CREATE PURCHASE ORDER (Manager/Admin)
+        // CREATE PURCHASE ORDER
         // =======================
         [Authorize(Roles = "Manager,Admin")]
         public async Task<IActionResult> CreatePurchaseOrder()
         {
             var suppliers = await _unitOfWork.Suppliers.GetAllAsync();
-            ViewBag.Suppliers = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(suppliers, "SupplierId", "Name");
+            ViewBag.Suppliers = new SelectList(suppliers, "SupplierId", "Name");
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Manager,Admin")]
-        public async Task<IActionResult> CreatePurchaseOrder(Order order)
+        public async Task<IActionResult> CreatePurchaseOrder(PurchaseOrderDto dto)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                order.OrderType = "Purchase";
-                order.Status = "Pending";
-                await _unitOfWork.Orders.AddAsync(order);
-                await _unitOfWork.CompleteAsync();
-                return RedirectToAction(nameof(Index));
+                var suppliers = await _unitOfWork.Suppliers.GetAllAsync();
+                ViewBag.Suppliers = new SelectList(suppliers, "SupplierId", "Name", dto.SupplierId);
+                return View(dto);
             }
 
-            var suppliers = await _unitOfWork.Suppliers.GetAllAsync();
-            ViewBag.Suppliers = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(suppliers, "SupplierId", "Name");
-            return View(order);
-        }
+            // Map DTO to actual Order model
+            var order = new Order
+            {
+                OrderNumber = dto.OrderNumber,
+                SupplierId = dto.SupplierId,
+                TotalAmount = dto.TotalAmount,
+                OrderType = "Purchase",
+                Status = "Pending",
+                CreatedByUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? string.Empty,
+                OrderDetails = new List<OrderDetail>(),
+                InventoryTransactions = new List<InventoryTransaction>()
+            };
 
+            await _unitOfWork.Orders.AddAsync(order);
+            await _unitOfWork.CompleteAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
         // =======================
         // CREATE SALES ORDER (Staff/Manager/Admin)
         // =======================
@@ -73,7 +109,6 @@ namespace InventoryManagement.Controllers
         {
             return View();
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Staff,Manager,Admin")]
@@ -89,7 +124,6 @@ namespace InventoryManagement.Controllers
             }
             return View(order);
         }
-
         // =======================
         // APPROVE / CANCEL ORDERS (Manager/Admin)
         // =======================
@@ -98,8 +132,7 @@ namespace InventoryManagement.Controllers
         public async Task<IActionResult> ApproveOrder(int id)
         {
             var order = await _unitOfWork.Orders.GetByIdAsync(id);
-            if (order == null)
-                return NotFound();
+            if (order == null) return NotFound();
 
             order.Status = "Approved";
             _unitOfWork.Orders.Update(order);
@@ -107,14 +140,12 @@ namespace InventoryManagement.Controllers
 
             return RedirectToAction(nameof(Details), new { id });
         }
-
         [HttpPost]
         [Authorize(Roles = "Manager,Admin")]
         public async Task<IActionResult> CancelOrder(int id)
         {
             var order = await _unitOfWork.Orders.GetByIdAsync(id);
-            if (order == null)
-                return NotFound();
+            if (order == null) return NotFound();
 
             order.Status = "Cancelled";
             _unitOfWork.Orders.Update(order);
@@ -122,7 +153,6 @@ namespace InventoryManagement.Controllers
 
             return RedirectToAction(nameof(Details), new { id });
         }
-
         // =======================
         // DELETE ORDER (Admin only)
         // =======================
@@ -133,10 +163,8 @@ namespace InventoryManagement.Controllers
             var order = await _unitOfWork.Orders.GetByIdAsync(id);
             if (order == null)
                 return NotFound();
-
             _unitOfWork.Orders.Remove(order);
             await _unitOfWork.CompleteAsync();
-
             return RedirectToAction(nameof(Index));
         }
     }

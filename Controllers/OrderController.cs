@@ -26,40 +26,39 @@ namespace InventoryManagement.Controllers
         }
 
         // details
-        [Authorize(Roles = "Admin,Manager,Staff")]
-        public async Task<IActionResult> Details(int id)
-        {
-            // Fetch order and eager-load related data
-            var order = await _unitOfWork.Orders.GetByIdAsync(
-                id,
-                includeProperties: "OrderDetails.Product,InventoryTransactions.Product,CreatedBy,Supplier"
-            );
+        //[Authorize(Roles = "Admin,Manager,Staff")]
+        //public async Task<IActionResult> Details(int id)
+        //{
+        //    var order = await _unitOfWork.Orders.GetByIdAsync(
+        //                    id,
+        //                    o => o.OrderId,  // explicitly tell EF which property is the key
+        //                    o => o.OrderDetails,
+        //                    o => o.InventoryTransactions,
+        //                    o => o.CreatedBy,
+        //                    o => o.Supplier
+        //    );
 
-            if (order == null)
-                return NotFound();
+        //    if (order == null)
+        //        return NotFound();
 
-            // Ensure collections are not null
-            order.OrderDetails = order.OrderDetails ?? new List<OrderDetail>();
-            order.InventoryTransactions = order.InventoryTransactions ?? new List<InventoryTransaction>();
+        //    // Map to DTO
+        //    var dto = new OrderDetailDto
+        //    {
+        //        OrderId = order.OrderId,
+        //        OrderNumber = order.OrderNumber,
+        //        OrderType = order.OrderType,
+        //        Status = order.Status,
+        //        TotalAmount = order.TotalAmount,
+        //        CreatedAt = order.CreatedAt,
+        //        CreatedByUserId = order.CreatedByUserId,
+        //        CreatedByName = order.CreatedBy?.UserName ?? "",
+        //        SupplierName = order.Supplier?.Name ?? "",
+        //        OrderDetails = order.OrderDetails ?? new List<OrderDetail>(),
+        //        InventoryTransactions = order.InventoryTransactions ?? new List<InventoryTransaction>()
+        //    };
 
-            // Map to DTO
-            var dto = new OrderDetailDto
-            {
-                OrderId = order.OrderId,
-                OrderNumber = order.OrderNumber,
-                OrderType = order.OrderType,
-                Status = order.Status,
-                TotalAmount = order.TotalAmount,
-                CreatedAt = order.CreatedAt,
-                CreatedByUserId = order.CreatedByUserId,
-                CreatedByName = order.CreatedBy?.UserName ?? "",
-                SupplierName = order.Supplier?.Name ?? "",
-                OrderDetails = order.OrderDetails,
-                InventoryTransactions = order.InventoryTransactions
-            };
-
-            return View(dto);
-        }
+        //    return View(dto);
+        //}
         // =======================
         // CREATE PURCHASE ORDER
         // =======================
@@ -127,7 +126,7 @@ namespace InventoryManagement.Controllers
         // =======================
         // APPROVE / CANCEL ORDERS (Manager/Admin)
         // =======================
-        [HttpPost]
+        //[HttpPost]
         [Authorize(Roles = "Manager,Admin")]
         public async Task<IActionResult> ApproveOrder(int id)
         {
@@ -138,9 +137,10 @@ namespace InventoryManagement.Controllers
             _unitOfWork.Orders.Update(order);
             await _unitOfWork.CompleteAsync();
 
-            return RedirectToAction(nameof(Details), new { id });
+            //return RedirectToAction(nameof(Details), new { id });
+            return RedirectToAction(nameof(Index));
         }
-        [HttpPost]
+        //[HttpPost]
         [Authorize(Roles = "Manager,Admin")]
         public async Task<IActionResult> CancelOrder(int id)
         {
@@ -151,7 +151,8 @@ namespace InventoryManagement.Controllers
             _unitOfWork.Orders.Update(order);
             await _unitOfWork.CompleteAsync();
 
-            return RedirectToAction(nameof(Details), new { id });
+            //return RedirectToAction(nameof(Details), new { id });
+            return RedirectToAction(nameof(Index));
         }
         // =======================
         // DELETE ORDER (Admin only)

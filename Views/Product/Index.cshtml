@@ -4,7 +4,7 @@
 }
 
 <h2>Product List</h2>
-@if (User.IsInRole("Admin"))
+@if (User.IsInRole("Admin") || User.IsInRole("Manager"))
 {
     <a asp-action="Create" class="btn btn-primary mb-3">Add New Product</a>
 }

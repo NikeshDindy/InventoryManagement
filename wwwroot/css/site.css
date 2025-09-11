@@ -1,31 +1,176 @@
+/* ========================================
+   Inventory Management - Final CSS
+   ======================================== */
+
+/* ===============================
+   Base Styles
+   =============================== */
 html {
-  font-size: 14px;
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+    html {
+        font-size: 16px;
+    }
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    font-family: "Segoe UI", Roboto, sans-serif;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+/* Smooth transitions */
+* {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+/* ===============================
+   Theme Variables
+   =============================== */
+
+/* Light mode gradients */
+:root[data-bs-theme="light"] {
+    --bg-gradient: linear-gradient(135deg, #e2e8f0, #ffffff);
+    --card-gradient: linear-gradient(145deg, #ffffff, #f1f5f9);
+    --navbar-gradient: linear-gradient(90deg, #ffffff, #f8f9fa);
+    --footer-gradient: linear-gradient(90deg, #f8f9fa, #ffffff);
+    --text-color: #212529;
+    --link-color: #0d6efd;
+    --border-color: #dee2e6;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Dark mode gradients and muted containers */
+:root[data-bs-theme="dark"] {
+    --bg-gradient: #121212; /* subtle dark background */
+    --card-gradient: rgba(25,25,25,0.85); /* subtle dark glass for cards/containers */
+    --navbar-gradient: #1c1c1c;
+    --footer-gradient: #1c1c1c;
+    --text-color: #e0e0e0;
+    --link-color: #66b2ff;
+    --border-color: rgba(255, 255, 255, 0.15);
+    --shadow-color: rgba(0, 0, 0, 0.5);
+}
+
+    /* Force Bootstrap bg-white and bg-light in dark mode to use card-gradient */
+    :root[data-bs-theme="dark"] .bg-white,
+    :root[data-bs-theme="dark"] .bg-light {
+        background-color: var(--card-gradient) !important;
+        color: var(--text-color) !important;
+    }
+
+/* ===============================
+   Global Styles
+   =============================== */
+body {
+    background: var(--bg-gradient) !important;
+    color: var(--text-color) !important;
+}
+
+/* Navbar */
+.navbar {
+    background: var(--navbar-gradient) !important;
+    box-shadow: 0 2px 6px var(--shadow-color);
+}
+
+    .navbar .nav-link,
+    .navbar .navbar-brand {
+        color: var(--text-color) !important;
+    }
+
+        .navbar .nav-link:hover {
+            color: var(--link-color) !important;
+        }
+
+/* Footer */
+.footer {
+    background: var(--footer-gradient) !important;
+    color: var(--text-color) !important;
+    border-top: 1px solid var(--border-color);
+    box-shadow: 0 -2px 6px var(--shadow-color);
+}
+
+/* Buttons */
+.btn-outline-secondary {
+    color: var(--text-color);
+    border-color: var(--text-color);
+    transition: all 0.3s ease;
+}
+
+    .btn-outline-secondary:hover {
+        background-color: var(--link-color);
+        color: #fff;
+    }
+
+/* Links */
+a {
+    color: var(--link-color);
+    text-decoration: none;
+}
+
+    a:hover {
+        opacity: 0.8;
+    }
+
+/* Cards, jumbotron, hero, intro sections */
+.card,
+.jumbotron,
+.hero,
+.intro {
+    background: var(--card-gradient) !important;
+    color: var(--text-color) !important;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px var(--shadow-color);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+}
+
+/* Tables */
+.table {
+    background: var(--card-gradient) !important;
+    color: var(--text-color) !important;
+    box-shadow: 0 2px 6px var(--shadow-color);
+}
+
+    .table th,
+    .table td {
+        border-color: var(--border-color) !important;
+    }
+
+/* Focus styles */
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+/* ===============================
+   Theme Toggle Button Animation
+   =============================== */
+#themeToggle {
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+    #themeToggle:hover {
+        transform: rotate(20deg);
+        background-color: var(--link-color);
+        color: #fff;
+    }
+
+/* ===============================
+   Welcome/Custom Containers
+   =============================== */
+.welcome-container {
+    background: var(--card-gradient) !important;
+    color: var(--text-color) !important;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px var(--shadow-color);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    backdrop-filter: blur(8px);
 }

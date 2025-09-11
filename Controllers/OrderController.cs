@@ -1,12 +1,12 @@
 ﻿using InventoryManagement.Models;
 using InventoryManagement.Repositories;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace InventoryManagement.Controllers
 {
-    [Authorize(Roles = "Admin,Manager")]
+    [Authorize(Roles = "Admin,Manager,Staff")]
     public class OrderController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -16,14 +16,17 @@ namespace InventoryManagement.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        // GET: Orders
+        // =======================
+        // VIEW ORDERS
+        // =======================
+        [Authorize(Roles = "Admin,Manager,Staff")]
         public async Task<IActionResult> Index()
         {
             var orders = await _unitOfWork.Orders.GetAllAsync();
             return View(orders);
         }
 
-        // GET: Order/Details/5
+        [Authorize(Roles = "Admin,Manager,Staff")]
         public async Task<IActionResult> Details(int id)
         {
             var order = await _unitOfWork.Orders.GetByIdAsync(id);
@@ -32,46 +35,54 @@ namespace InventoryManagement.Controllers
             return View(order);
         }
 
-        // GET: Order/CreatePurchaseOrder
+        // =======================
+        // CREATE PURCHASE ORDER (Manager/Admin)
+        // =======================
+        [Authorize(Roles = "Manager,Admin")]
         public async Task<IActionResult> CreatePurchaseOrder()
         {
-            var suppliers = await _unitOfWork.Suppliers.GetAllAsync(); //allows the Razor view to render a dropdown list of available suppliers
+            var suppliers = await _unitOfWork.Suppliers.GetAllAsync();
             ViewBag.Suppliers = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(suppliers, "SupplierId", "Name");
-            // Render purchase order creation form
             return View();
         }
 
-        // POST: Order/CreatePurchaseOrder
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager,Admin")]
         public async Task<IActionResult> CreatePurchaseOrder(Order order)
         {
-            if (ModelState.IsValid && order.OrderType == "Purchase")
+            if (ModelState.IsValid)
             {
+                order.OrderType = "Purchase";
+                order.Status = "Pending";
                 await _unitOfWork.Orders.AddAsync(order);
                 await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
-            // If invalid, repopulate suppliers for the dropdown
+
             var suppliers = await _unitOfWork.Suppliers.GetAllAsync();
             ViewBag.Suppliers = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(suppliers, "SupplierId", "Name");
             return View(order);
         }
 
-        // GET: Order/CreateSalesOrder
+        // =======================
+        // CREATE SALES ORDER (Staff/Manager/Admin)
+        // =======================
+        [Authorize(Roles = "Staff,Manager,Admin")]
         public IActionResult CreateSalesOrder()
         {
-            // Render sales order creation form
             return View();
         }
 
-        // POST: Order/CreateSalesOrder
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Staff,Manager,Admin")]
         public async Task<IActionResult> CreateSalesOrder(Order order)
         {
-            if (ModelState.IsValid && order.OrderType == "Sales")
+            if (ModelState.IsValid)
             {
+                order.OrderType = "Sales";
+                order.Status = "Pending";
                 await _unitOfWork.Orders.AddAsync(order);
                 await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
@@ -79,9 +90,11 @@ namespace InventoryManagement.Controllers
             return View(order);
         }
 
-        // POST: Order/ApproveOrder/5
-        [Authorize(Roles = "Manager")]
+        // =======================
+        // APPROVE / CANCEL ORDERS (Manager/Admin)
+        // =======================
         [HttpPost]
+        [Authorize(Roles = "Manager,Admin")]
         public async Task<IActionResult> ApproveOrder(int id)
         {
             var order = await _unitOfWork.Orders.GetByIdAsync(id);
@@ -91,11 +104,12 @@ namespace InventoryManagement.Controllers
             order.Status = "Approved";
             _unitOfWork.Orders.Update(order);
             await _unitOfWork.CompleteAsync();
+
             return RedirectToAction(nameof(Details), new { id });
         }
 
-        // POST: Order/CancelOrder/5
         [HttpPost]
+        [Authorize(Roles = "Manager,Admin")]
         public async Task<IActionResult> CancelOrder(int id)
         {
             var order = await _unitOfWork.Orders.GetByIdAsync(id);
@@ -105,7 +119,25 @@ namespace InventoryManagement.Controllers
             order.Status = "Cancelled";
             _unitOfWork.Orders.Update(order);
             await _unitOfWork.CompleteAsync();
+
             return RedirectToAction(nameof(Details), new { id });
+        }
+
+        // =======================
+        // DELETE ORDER (Admin only)
+        // =======================
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var order = await _unitOfWork.Orders.GetByIdAsync(id);
+            if (order == null)
+                return NotFound();
+
+            _unitOfWork.Orders.Remove(order);
+            await _unitOfWork.CompleteAsync();
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

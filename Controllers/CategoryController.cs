@@ -1,7 +1,9 @@
 ﻿using InventoryManagement.Models;
 using InventoryManagement.Repositories;
 using InventoryManagement.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using System.Threading.Tasks;
 
 namespace InventoryManagement.Controllers
@@ -37,6 +39,7 @@ namespace InventoryManagement.Controllers
         }
 
         //GET: /Category/Create
+        [Authorize(Roles = "Admin, Manager")]
         public IActionResult Create()
         {
             return View();
@@ -66,6 +69,7 @@ namespace InventoryManagement.Controllers
         }
 
         // GET: /Category/Edit/5
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return BadRequest();
@@ -79,6 +83,7 @@ namespace InventoryManagement.Controllers
         // POST: /Category/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Edit(int id, CategoryEditDto dto)
         {
             if (id != dto.CategoryId) return BadRequest();
@@ -109,6 +114,7 @@ namespace InventoryManagement.Controllers
         }
 
         // GET: /Category/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return BadRequest();
@@ -122,6 +128,7 @@ namespace InventoryManagement.Controllers
         // POST: /Category/DeleteConfirmed/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var category = await _unitOfWork.Categories.GetByIdAsync(id);

@@ -12,7 +12,8 @@ namespace InventoryManagement.Controllers
             if (User.Identity != null && User.Identity.IsAuthenticated)
             {
                 if (User.IsInRole("Admin"))
-                    return RedirectToAction("AdminDashboard");
+                    return View("AdminDashboard");
+                    //return RedirectToAction("AdminDashboard");
 
                 if (User.IsInRole("Manager"))
                     return RedirectToAction("ManagerDashboard");

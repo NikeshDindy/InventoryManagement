@@ -20,7 +20,8 @@ namespace InventoryManagement.Controllers
         //GET: /Transaction
         public async Task<IActionResult> Index()
         {
-            var transactions = await _unitOfWork.Transactions.GetAllAsync();
+            var transactions = await _unitOfWork.Transactions.GetAllAsync(t => t.Product, t => t.PerformedBy);
+
             return View(transactions);
         }
 
@@ -118,6 +119,42 @@ namespace InventoryManagement.Controllers
             await _unitOfWork.CompleteAsync();
 
             TempData["Success"] = "Sale recorded successfully.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        // GET: /Transaction/Delete/5
+        public async Task<IActionResult> Delete(int id)
+        {
+            var transaction = await _unitOfWork.Transactions.GetByIdAsync(id);
+            if (transaction == null) return NotFound();
+
+            return View(transaction);
+        }
+
+        // POST: /Transaction/DeleteConfirmed/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var transaction = await _unitOfWork.Transactions.GetByIdAsync(id);
+            if (transaction == null) return NotFound();
+
+            var product = await _unitOfWork.Products.GetByIdAsync(transaction.ProductId);
+            if (product != null)
+            {
+                // Revert stock
+                if (transaction.TransactionType == "IN")
+                    product.StockQuantity -= transaction.Quantity; // undo purchase
+                else if (transaction.TransactionType == "OUT")
+                    product.StockQuantity += transaction.Quantity; // undo sale
+
+                _unitOfWork.Products.Update(product);
+            }
+
+            _unitOfWork.Transactions.Remove(transaction);
+            await _unitOfWork.CompleteAsync();
+
+            TempData["Success"] = "Transaction deleted successfully (stock reverted).";
             return RedirectToAction(nameof(Index));
         }
 

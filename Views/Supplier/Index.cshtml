@@ -22,12 +22,14 @@
                 <td>@supplier.Address</td>
                 <td>
                     <a asp-action="Details" asp-route-id="@supplier.SupplierId">Details</a> |
-                    <a asp-action="Edit" asp-route-id="@supplier.SupplierId">Edit</a> 
+                    @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@supplier.SupplierId">Edit</a>
+                    }
                     
                     @if (User.IsInRole("Admin"))
                     {
-                        <a asp-action="Delete" asp-route-id="@supplier.SupplierId">Delete</a>
-
+                        <a asp-action="Delete" asp-route-id="@supplier.SupplierId"> | Delete</a>
                     }
                 </td>
             </tr>

@@ -2,7 +2,9 @@
 {
     public class CreatePurchaseOrderDto
     {
-         public int SupplierId { get; set; }
-        public decimal TotalAmount { get; set; }
+        public int SupplierId { get; set; }
+
+        // Optional: user can enter it, or system will auto-generate
+        public string? OrderNumber { get; set; }
     }
 }

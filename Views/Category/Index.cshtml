@@ -15,9 +15,15 @@
     <div class="alert alert-danger">@TempData["Error"]</div>
 }
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Create New Category</a>
-</p>
+@if (User.IsInRole("Manager") || User.IsInRole("Admin"))
+{
+    <p>
+        <a asp-action="Create" class="btn btn-primary">Create New Category</a>
+    </p>
+
+}
+
+
 
 <table class="table table-bordered table-striped">
     <thead class="table-dark">

@@ -5,10 +5,14 @@
 }
 
 <h1>Products</h1>
+@if (User.IsInRole("Manager") || User.IsInRole("Admin"))
+{
+    <p>
+        <a asp-action="Create" class="btn btn-primary">Create New</a>
+    </p>
+    
+}
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>

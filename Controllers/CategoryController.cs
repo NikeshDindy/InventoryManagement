@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using InventoryManagement.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace InventoryManagement.Controllers
 {
@@ -36,6 +37,7 @@ namespace InventoryManagement.Controllers
         }
 
         //GET: /Category/Create
+        [Authorize(Roles = "Admin, Manager")]
         public IActionResult Create()
         {
             return View();
@@ -44,6 +46,7 @@ namespace InventoryManagement.Controllers
         //POST: /Category/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Create([Bind("Name,Description")] Category category)
         {
             if (!ModelState.IsValid)
@@ -68,6 +71,7 @@ namespace InventoryManagement.Controllers
         }
 
         // GET: /Category/Edit/5
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return BadRequest();
@@ -81,6 +85,7 @@ namespace InventoryManagement.Controllers
         // POST: /Category/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Edit(int id, [Bind("CategoryId,Name,Description")] Category category)
         {
             if (id != category.CategoryId) return BadRequest();
@@ -104,6 +109,7 @@ namespace InventoryManagement.Controllers
         }
 
         // GET: /Category/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return BadRequest();
@@ -117,6 +123,7 @@ namespace InventoryManagement.Controllers
         // POST: /Category/DeleteConfirmed/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var category = await _unitOfWork.Categories.GetByIdAsync(id);

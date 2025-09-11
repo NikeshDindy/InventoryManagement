@@ -1,5 +1,4 @@
-﻿@model IEnumerable<InventoryManagement.Models.Product>
-
+﻿@model IEnumerable<InventoryManagement.ViewModels.ProductDto>
 @{
     ViewData["Title"] = "Stock Summary";
 }
@@ -23,8 +22,8 @@
             <tr>
                 <td>@product.SKU</td>
                 <td>@product.Name</td>
-                <td>@product.Category?.Name</td>
-                <td>@product.Supplier?.Name</td>
+                <td>@product.CategoryName</td>
+                <td>@product.SupplierName</td>
                 <td>@product.StockQuantity</td>
                 <td>@product.LowStockThreshold</td>
             </tr>

@@ -2,6 +2,7 @@
 using InventoryManagement.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using InventoryManagement.ViewModels;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,11 +18,31 @@ namespace InventoryManagement.Controllers
         {
             _unitOfWork = unitOfWork;
         }
+        // GET: Report
+        public IActionResult Index()
+        {
+            // This view will serve as the report dashboard
+            return View();
+        }
 
         public async Task<IActionResult> StockSummary()
         {
             var products = await _unitOfWork.Products.GetAllAsync();
-            return View(products);
+            var categories = await _unitOfWork.Categories.GetAllAsync();
+            var suppliers = await _unitOfWork.Suppliers.GetAllAsync();
+
+            var productDtos = products.Select(p => new ProductDto
+            {
+                ProductId = p.ProductId,
+                SKU = p.SKU,
+                Name = p.Name,
+                StockQuantity = p.StockQuantity,
+                LowStockThreshold = p.LowStockThreshold,
+                CategoryName = categories.FirstOrDefault(c => c.CategoryId == p.CategoryId)?.Name,
+                SupplierName = suppliers.FirstOrDefault(s => s.SupplierId == p.SupplierId)?.Name
+            }).ToList();
+
+            return View(productDtos);
         }
 
         public async Task<IActionResult> LowStock()

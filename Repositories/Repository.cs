@@ -1,4 +1,5 @@
 ﻿using InventoryManagement.Data;
+using InventoryManagement.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
@@ -71,5 +72,42 @@ namespace InventoryManagement.Repositories
         {
             _dbSet.RemoveRange(entities);
         }
+
+
+        // new method
+        //    public async Task<T?> GetByIdAsync<TKey>(
+        //TKey id,
+        //Expression<Func<T, TKey>> keySelector,
+        //params Expression<Func<T, object>>[] includes)
+        //    {
+        //        IQueryable<T> query = _context.Set<T>();
+
+        //        foreach (var include in includes)
+        //        {
+        //            query = query.Include(include);
+        //        }
+
+        //        return await query.FirstOrDefaultAsync(e => keySelector.Compile()(e).Equals(id));
+        //    }
+
+        public async Task<T?> GetByIdAsync(int id, params Expression<Func<T, object>>[] includes)
+        {
+            IQueryable<T> query = _dbSet;
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+
+            // assumes the PK is named "Id" OR "{EntityName}Id"
+            var entityType = _context.Model.FindEntityType(typeof(T));
+            var keyName = entityType.FindPrimaryKey().Properties
+                                    .Select(x => x.Name)
+                                    .First(); // e.g. "OrderId"
+
+            return await query.FirstOrDefaultAsync(e =>
+                EF.Property<int>(e, keyName) == id);
+        }
+
     }
 }

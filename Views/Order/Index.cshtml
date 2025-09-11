@@ -12,7 +12,11 @@
 
     }
 
-<a asp-action="CreateSalesOrder" class="btn btn-secondary">Create Sales Order</a>
+    @if (User.IsInRole("Staff"))
+    {
+        <a asp-action="CreateSalesOrder" class="btn btn-secondary">Create Sales Order</a>
+    }
+    
 </p>
 <table class="table table-striped">
     <thead>
@@ -35,7 +39,7 @@
                 <td>@order.CreatedAt.ToShortDateString()</td>
                 <td>@order.TotalAmount.ToString("C")</td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@order.OrderId">Details</a>
+                    
                     @if (User.IsInRole("Manager") && order.Status == "Pending")
                     {
                         <a asp-action="ApproveOrder" asp-route-id="@order.OrderId" class="ms-2">Approve</a>

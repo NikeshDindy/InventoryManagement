@@ -25,7 +25,6 @@
     </a>
 </div>
 
-
 <table class="table table-bordered table-striped">
     <thead class="table-dark">
         <tr>
@@ -35,6 +34,12 @@
             <th>Timestamp</th>
             <th>Notes</th>
             <th>Performed By</th>
+
+            @* Show Actions header only if Admin/Manager *@
+            @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+            {
+                <th>Actions</th>
+            }
         </tr>
     </thead>
     <tbody>
@@ -56,6 +61,18 @@
                 <td>@transaction.Timestamp.ToString("g")</td>
                 <td>@transaction.Notes</td>
                 <td>@transaction.PerformedByUserId</td>
+
+                @* Show Delete button only if Admin/Manager *@
+                @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                {
+                    <td>
+                        <a asp-action="Delete" asp-route-id="@transaction.TransactionId"
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirm('Are you sure you want to delete this transaction? This will also revert stock.');">
+                            Delete
+                        </a>
+                    </td>
+                }
             </tr>
         }
     </tbody>

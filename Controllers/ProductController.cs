@@ -43,7 +43,7 @@ public class ProductController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     [Authorize(Roles = "Admin,Manager")]
-    public async Task<IActionResult> Create(Product product)
+    public async Task<IActionResult> Create([Bind("ProductId,SKU,Name,Description,UnitPrice,StockQuantity,LowStockThreshold,CategoryId,SupplierId")] Product product)
     {
         if (ModelState.IsValid)
         {
@@ -71,7 +71,7 @@ public class ProductController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     [Authorize(Roles = "Admin,Manager")]
-    public async Task<IActionResult> Edit(int id, Product product)
+    public async Task<IActionResult> Edit(int id, [Bind("ProductId,SKU,Name,Description,UnitPrice,StockQuantity,LowStockThreshold,CategoryId,SupplierId")] Product product)
     {
         if (id != product.ProductId) return BadRequest();
 

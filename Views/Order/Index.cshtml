@@ -4,8 +4,15 @@
 }
 <h2>Orders</h2>
 <p>
-    <a asp-action="CreatePurchaseOrder" class="btn btn-primary">Create Purchase Order</a>
-    <a asp-action="CreateSalesOrder" class="btn btn-secondary">Create Sales Order</a>
+    @if (User.IsInRole("Manager") || User.IsInRole("Admin"))
+    {
+    <p>
+        <a asp-action="CreatePurchaseOrder" class="btn btn-primary">Create Purchase Order</a>
+    </p>
+
+    }
+
+<a asp-action="CreateSalesOrder" class="btn btn-secondary">Create Sales Order</a>
 </p>
 <table class="table table-striped">
     <thead>

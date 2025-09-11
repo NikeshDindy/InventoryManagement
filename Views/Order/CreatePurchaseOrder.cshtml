@@ -1,4 +1,4 @@
-﻿@model InventoryManagement.Models.Order
+﻿@model InventoryManagement.ViewModels.PurchaseOrderDto
 
 @{
     ViewData["Title"] = "Create Purchase Order";
@@ -6,6 +6,18 @@
 }
 
 <h2>Create Purchase Order</h2>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
 
 <form asp-action="CreatePurchaseOrder" method="post">
     <div class="mb-3">
@@ -22,7 +34,11 @@
         <span asp-validation-for="SupplierId" class="text-danger"></span>
     </div>
 
-    <input type="hidden" asp-for="OrderType" value="Purchase" />
+    <div class="mb-3">
+        <label asp-for="TotalAmount" class="form-label"></label>
+        <input asp-for="TotalAmount" class="form-control" />
+        <span asp-validation-for="TotalAmount" class="text-danger"></span>
+    </div>
 
     <button type="submit" class="btn btn-primary">Create</button>
     <a asp-action="Index" class="btn btn-secondary">Cancel</a>

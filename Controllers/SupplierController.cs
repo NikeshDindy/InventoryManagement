@@ -51,7 +51,7 @@ namespace InventoryManagement.Controllers
         [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Create([Bind("SupplierId,Name,ContactInfo,Address")] Supplier supplier)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid                                                                                                                                                                                                          )
             {
                 await _unitOfWork.Suppliers.AddAsync(supplier);
                 await _unitOfWork.CompleteAsync();

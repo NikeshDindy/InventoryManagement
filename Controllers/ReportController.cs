@@ -19,11 +19,11 @@ namespace InventoryManagement.Controllers
             _unitOfWork = unitOfWork;
         }
         // GET: Report
-        public IActionResult Index()
-        {
-            // This view will serve as the report dashboard
-            return View();
-        }
+public IActionResult Index()
+{
+    // This view will serve as the report dashboard
+    return View();
+}
 
         public async Task<IActionResult> StockSummary()
         {
@@ -55,7 +55,10 @@ namespace InventoryManagement.Controllers
 
         public async Task<IActionResult> TransactionSummary()
         {
-            var transactions = await _unitOfWork.Transactions.GetAllAsync();
+            //var transactions = await _unitOfWork.Transactions.GetAllAsync();
+            //return View(transactions);
+            var transactions = await _unitOfWork.Transactions.GetAllAsync(t => t.Product, t => t.PerformedBy);
+
             return View(transactions);
         }
 
@@ -98,25 +101,35 @@ namespace InventoryManagement.Controllers
         }
 
         // GET: Report/TopSellingProducts
-        // Returns top N products by quantity sold
+        // GET: Report/TopSellingProductsFixed
         public async Task<IActionResult> TopSellingProducts(int topN = 10)
         {
+            // Load Orders with their OrderDetails and Product info
             var orders = await _unitOfWork.Orders.GetAllAsync();
-            var orderDetails = orders.SelectMany(o => o.OrderDetails).ToList();
+
+            // Make sure OrderDetails is not null
+            var orderDetails = orders
+                .Where(o => o.OrderDetails != null)
+                .SelectMany(o => o.OrderDetails)
+                .Where(od => od.Product != null)
+                .ToList();
 
             var topProducts = orderDetails
-                .GroupBy(od => od.Product)
+                .GroupBy(od => new { od.Product.ProductId, od.Product.Name })
                 .Select(g => new
                 {
-                    Product = g.Key,
+                    ProductId = g.Key.ProductId,
+                    ProductName = g.Key.Name,
                     TotalQuantitySold = g.Sum(od => od.Quantity)
                 })
                 .OrderByDescending(p => p.TotalQuantitySold)
                 .Take(topN)
                 .ToList();
 
-            return View(topProducts);
+            return View("TopSellingProducts", topProducts);
+
         }
+
 
         // GET: Report/InventoryTurnover
         // Calculates inventory turnover ratio based on sales and average inventory

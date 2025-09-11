@@ -20,7 +20,8 @@ namespace InventoryManagement.Controllers
         //GET: /Transaction
         public async Task<IActionResult> Index()
         {
-            var transactions = await _unitOfWork.Transactions.GetAllAsync();
+            var transactions = await _unitOfWork.Transactions.GetAllAsync(t => t.Product, t => t.PerformedBy);
+
             return View(transactions);
         }
 

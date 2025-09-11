@@ -55,7 +55,10 @@ namespace InventoryManagement.Controllers
 
         public async Task<IActionResult> TransactionSummary()
         {
-            var transactions = await _unitOfWork.Transactions.GetAllAsync();
+            //var transactions = await _unitOfWork.Transactions.GetAllAsync();
+            //return View(transactions);
+            var transactions = await _unitOfWork.Transactions.GetAllAsync(t => t.Product, t => t.PerformedBy);
+
             return View(transactions);
         }
 

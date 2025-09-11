@@ -97,11 +97,11 @@ namespace InventoryManagement.Controllers
                 var user = await _userManager.FindByEmailAsync(model.Email);
                 var roles = await _userManager.GetRolesAsync(user);
 
-                _logger.LogInformation($"✅ User {model.Email} logged in successfully as {string.Join(",", roles)}.");
+                //_logger.LogInformation($"✅ User {model.Email} logged in successfully as {string.Join(",", roles)}.");
 
                 // Redirect according to role
                 if (roles.Contains("Admin")) {
-                    _logger.LogInformation("-----------admin dashborard entering-----------");
+                    //_logger.LogInformation("-----------admin dashborard entering-----------");
                     return RedirectToAction("AdminDashboard", "Home");
                 }
                     
@@ -112,7 +112,7 @@ namespace InventoryManagement.Controllers
                 else
                     return RedirectToAction("Index", "Home");
             }
-            _logger.LogInformation("-----------out the dashborads-----------");
+            //_logger.LogInformation("-----------out the dashborads-----------");
             ModelState.AddModelError(string.Empty, "Invalid login attempt.");
             return View(model);
         }

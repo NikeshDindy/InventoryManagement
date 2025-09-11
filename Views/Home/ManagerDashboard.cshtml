@@ -69,10 +69,11 @@
             <div class="card shadow-sm border-0 h-100">
                 <div class="card-body text-center">
                     <i class="fas fa-user-circle fa-3x text-secondary mb-3"></i>
-                    <h5 class="card-title">My Profile</h5>
+                    <h5 class="card-title">My Profile</h5> 
+                    <p>@User.Identity.Name</p>
                     <p class="text-muted">Update account information and password.</p>
                     <a href="@Url.Action("Manage", "Account")" class="btn btn-secondary btn-sm">Edit Profile</a>
-                </div>     @* till now manage action is not being created inside account controller *@
+                </div>     @* till now manage action is not being created inside account controller   *@
             </div>
         </div>
     </div>

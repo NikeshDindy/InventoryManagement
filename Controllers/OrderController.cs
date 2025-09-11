@@ -1,8 +1,10 @@
 ﻿using InventoryManagement.Models;
+using InventoryManagement.Models.ViewModel.Orders;
 using InventoryManagement.Repositories;
+using InventoryManagement.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace InventoryManagement.Controllers
 {
@@ -23,7 +25,18 @@ namespace InventoryManagement.Controllers
         public async Task<IActionResult> Index()
         {
             var orders = await _unitOfWork.Orders.GetAllAsync();
-            return View(orders);
+
+            var orderDtos = orders.Select(o => new OrderDto
+            {
+                OrderId = o.OrderId,
+                OrderType = o.OrderType,
+                Status = o.Status,
+                TotalAmount = o.TotalAmount,
+                CreatedAt = o.CreatedAt,
+                SupplierName = o.Supplier?.Name
+            }).ToList();
+
+            return View(orderDtos);
         }
 
         [Authorize(Roles = "Admin,Manager,Staff")]
@@ -32,7 +45,18 @@ namespace InventoryManagement.Controllers
             var order = await _unitOfWork.Orders.GetByIdAsync(id);
             if (order == null)
                 return NotFound();
-            return View(order);
+
+            var orderDto = new OrderDto
+            {
+                OrderId = order.OrderId,
+                OrderType = order.OrderType,
+                Status = order.Status,
+                TotalAmount = order.TotalAmount,
+                CreatedAt = order.CreatedAt,
+                SupplierName = order.Supplier?.Name
+            };
+
+            return View(orderDto);
         }
 
         // =======================
@@ -42,27 +66,34 @@ namespace InventoryManagement.Controllers
         public async Task<IActionResult> CreatePurchaseOrder()
         {
             var suppliers = await _unitOfWork.Suppliers.GetAllAsync();
-            ViewBag.Suppliers = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(suppliers, "SupplierId", "Name");
-            return View();
+            ViewBag.Suppliers = new SelectList(suppliers, "SupplierId", "Name");
+            return View(new CreatePurchaseOrderDto());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Manager,Admin")]
-        public async Task<IActionResult> CreatePurchaseOrder(Order order)
+        public async Task<IActionResult> CreatePurchaseOrder(CreatePurchaseOrderDto dto)
         {
             if (ModelState.IsValid)
             {
-                order.OrderType = "Purchase";
-                order.Status = "Pending";
+                var order = new Order
+                {
+                    SupplierId = dto.SupplierId,
+                    TotalAmount = dto.TotalAmount,
+                    OrderType = "Purchase",
+                    Status = "Pending",
+                    CreatedAt = DateTime.UtcNow
+                };
+
                 await _unitOfWork.Orders.AddAsync(order);
                 await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
 
             var suppliers = await _unitOfWork.Suppliers.GetAllAsync();
-            ViewBag.Suppliers = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(suppliers, "SupplierId", "Name");
-            return View(order);
+            ViewBag.Suppliers = new SelectList(suppliers, "SupplierId", "Name");
+            return View(dto);
         }
 
         // =======================
@@ -71,23 +102,29 @@ namespace InventoryManagement.Controllers
         [Authorize(Roles = "Staff,Manager,Admin")]
         public IActionResult CreateSalesOrder()
         {
-            return View();
+            return View(new CreateSalesOrderDto());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Staff,Manager,Admin")]
-        public async Task<IActionResult> CreateSalesOrder(Order order)
+        public async Task<IActionResult> CreateSalesOrder(CreateSalesOrderDto dto)
         {
             if (ModelState.IsValid)
             {
-                order.OrderType = "Sales";
-                order.Status = "Pending";
+                var order = new Order
+                {
+                    TotalAmount = dto.TotalAmount,
+                    OrderType = "Sales",
+                    Status = "Pending",
+                    CreatedAt = DateTime.UtcNow
+                };
+
                 await _unitOfWork.Orders.AddAsync(order);
                 await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(order);
+            return View(dto);
         }
 
         // =======================
@@ -95,32 +132,30 @@ namespace InventoryManagement.Controllers
         // =======================
         [HttpPost]
         [Authorize(Roles = "Manager,Admin")]
-        public async Task<IActionResult> ApproveOrder(int id)
+        public async Task<IActionResult> ApproveOrder(UpdateOrderStatusDto dto)
         {
-            var order = await _unitOfWork.Orders.GetByIdAsync(id);
-            if (order == null)
-                return NotFound();
+            var order = await _unitOfWork.Orders.GetByIdAsync(dto.OrderId);
+            if (order == null) return NotFound();
 
             order.Status = "Approved";
             _unitOfWork.Orders.Update(order);
             await _unitOfWork.CompleteAsync();
 
-            return RedirectToAction(nameof(Details), new { id });
+            return RedirectToAction(nameof(Details), new { id = dto.OrderId });
         }
 
         [HttpPost]
         [Authorize(Roles = "Manager,Admin")]
-        public async Task<IActionResult> CancelOrder(int id)
+        public async Task<IActionResult> CancelOrder(UpdateOrderStatusDto dto)
         {
-            var order = await _unitOfWork.Orders.GetByIdAsync(id);
-            if (order == null)
-                return NotFound();
+            var order = await _unitOfWork.Orders.GetByIdAsync(dto.OrderId);
+            if (order == null) return NotFound();
 
             order.Status = "Cancelled";
             _unitOfWork.Orders.Update(order);
             await _unitOfWork.CompleteAsync();
 
-            return RedirectToAction(nameof(Details), new { id });
+            return RedirectToAction(nameof(Details), new { id = dto.OrderId });
         }
 
         // =======================
@@ -131,8 +166,7 @@ namespace InventoryManagement.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var order = await _unitOfWork.Orders.GetByIdAsync(id);
-            if (order == null)
-                return NotFound();
+            if (order == null) return NotFound();
 
             _unitOfWork.Orders.Remove(order);
             await _unitOfWork.CompleteAsync();

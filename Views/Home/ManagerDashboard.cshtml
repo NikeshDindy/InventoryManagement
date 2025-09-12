@@ -230,7 +230,7 @@
     </div>
 
     <!-- Second Row -->
-    <div class="row g-4 mt-3">
+    <div class="row g-4 mt-3 mb-5">
         <!-- Reports -->
         <div class="col-lg-6">
             <div class="card shadow-sm border-0 h-100">
@@ -245,33 +245,30 @@
         <!-- Profile -->
         <div class="col-lg-6">
             <div class="card shadow-sm border-0 h-100">
-                <div class="card-body text-center">
+                @* <div class="card-body text-center">
                     <i class="fas fa-user-circle fa-3x text-secondary mb-3"></i>
                     <h5 class="card-title">My Profile</h5>
                     <p>@User.Identity.Name</p>
                     <p class="text-muted">Update account information and password.</p>
                     <a href="@Url.Action("Manage", "Account")" class="btn btn-secondary btn-sm">Edit Profile</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Third Row -->
-    <div class="row g-4 mt-3">
-        <div class="col-lg-12">
-            <div class="card shadow-sm border-0">
+                </div> *@
                 <div class="card-body">
                     <h5 class="card-title"><i class="fas fa-history text-secondary"></i> Recent Activity</h5>
-                    <ul class="timeline">
+                    @* <ul class="timeline">
                         <li><span>✔️ Order #123 approved</span> <small>2 mins ago</small></li>
                         <li><span>📦 New product added: Laptop</span> <small>10 mins ago</small></li>
                         <li><span>👤 Supplier "ABC Traders" updated</span> <small>30 mins ago</small></li>
                         <li><span>💰 Purchase Order #98 created</span> <small>1 hr ago</small></li>
-                    </ul>
+                    </ul> *@
+                    <ul id="recentActivity" class="timeline"></ul>
+
                 </div>
+
             </div>
         </div>
     </div>
+
+
 </div>
 
 @{
@@ -350,6 +347,32 @@
     }
 
     loadChart();
+
+    //Code to update Recent activity
+    async function loadRecentActivity() {
+        const res = await fetch('@Url.Action("GetRecentActivity", "Home")');
+        const data = await res.json();
+
+        const container = document.getElementById("recentActivity");
+        container.innerHTML = "";
+
+        data.forEach(item => {
+            const ts = new Date(item.timestamp).toLocaleString();
+            const icon = item.type === "IN" ? "📥" : "📤";
+
+            const li = document.createElement("li");
+            li.innerHTML = `
+                <span>${icon} ${item.type} - ${item.quantity} x ${item.productName}</span>
+                <small>${ts} by ${item.user}</small>
+            `;
+
+            container.appendChild(li);
+        });
+    }
+
+
+    loadRecentActivity();
+
 
     // Dark Mode Toggle
     const body = document.body;

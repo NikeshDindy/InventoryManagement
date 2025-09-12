@@ -51,7 +51,7 @@
     <p>@Model.PerformedByUserId</p>
 </div>
 
-<form asp-action="Delete" method="post">
+<form asp-action="Delete" method="post" class="mb-5">
     <input type="hidden" asp-for="TransactionId" />
     <button type="submit" class="btn btn-danger">Delete</button>
     <a asp-action="Index" class="btn btn-secondary">Cancel</a>

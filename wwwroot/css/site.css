@@ -377,6 +377,12 @@ a {
     }
 }
 
+/* Remove underline from all Bootstrap-style buttons that are actually <a> links */
+a.btn, a.btn:hover, a.btn:focus {
+    text-decoration: none !important;
+}
+
+
 
 
 

@@ -127,6 +127,29 @@ namespace InventoryManagement.Controllers
             return Json(new { labels, sales, purchases });
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetRecentActivity()
+        {
+            var recentTransactions = (await _unitOfWork.Transactions
+                .GetAllAsync(t => t.Product, t => t.PerformedBy))
+                .OrderByDescending(t => t.Timestamp)
+                .Take(5)
+                .Select(t => new
+                {
+                    timestamp = t.Timestamp,
+                    productName = t.Product != null ? t.Product.Name : "Unknown Product",
+                    quantity = t.Quantity,
+                    type = t.TransactionType,
+                    user = t.PerformedBy != null ? t.PerformedBy.UserName : "System",
+                    notes = t.Notes ?? ""
+                })
+                .ToList();
+
+            return Json(recentTransactions);
+        }
+
+
+
 
         public IActionResult AccessDenied()
         {

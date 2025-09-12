@@ -23,6 +23,7 @@
             box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
             background: linear-gradient(135deg, #43e97b, #38f9d7);
             color: #fff;
+            text-decoration: none !important;
         }
 
         /* Variant Colors (per section) */
@@ -41,6 +42,10 @@
 
         .btn-go.report {
             background: linear-gradient(135deg, #ff0844, #ffb199);
+        }
+
+        .btn-go.order {
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
         }
 
     /* Light & Dark Mode */
@@ -226,7 +231,7 @@
 
 
         <!-- Orders -->
-        <div class="col-lg-3 col-md-6">
+        @* <div class="col-lg-3 col-md-6">
             <div class="card shadow-sm border-0 h-100">
                 <div class="card-body text-center">
                     <i class="fas fa-clipboard-list fa-2x text-primary mb-3"></i>
@@ -238,6 +243,21 @@
 
                     <a href="@Url.Action("CreatePurchaseOrder", "Order")"
                        class="btn btn-primary btn-sm mt-2">+ New</a>
+                </div>
+            </div>
+        </div> *@
+
+        <div class="col-md-3 mb-4">
+            <div class="card h-100 text-center p-3">
+                <div class="card-body d-flex flex-column">
+                    <i class="fas fa-clipboard-list fa-2x text-primary mb-3"></i>
+                    <h5 class="card-title">Orders</h5>
+                    <p class="small text-muted flex-grow-1">
+                        Manage and approve purchase orders.
+                    </p>
+                    <a asp-controller="Order" asp-action="Index" class="btn btn-go order mt-auto">
+                        Go
+                    </a>
                 </div>
             </div>
         </div>

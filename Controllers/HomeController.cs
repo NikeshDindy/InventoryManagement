@@ -42,7 +42,7 @@ namespace InventoryManagement.Controllers
             var userCount = _userManager.Users.Count();  // total registered users
             var categoryCount = (await _unitOfWork.Categories.GetAllAsync()).Count();
             var supplierCount = (await _unitOfWork.Suppliers.GetAllAsync()).Count();
-            var reportCount = 7; // you can calculate dynamically later
+            var reportCount = 4; // you can calculate dynamically later
 
             ViewBag.UserCount = userCount;
             ViewBag.CategoryCount = categoryCount;

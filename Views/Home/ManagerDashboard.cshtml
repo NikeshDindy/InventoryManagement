@@ -280,24 +280,59 @@
 }
 
 <!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    var ctx = document.getElementById('reportChart').getContext('2d');
-    var reportChart = new Chart(ctx, {
+    // var ctx = document.getElementById('reportChart').getContext('2d');
+    // var reportChart = new Chart(ctx, {
+    //     type: 'bar',
+    //     data: {
+    //         labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+    //         datasets: [{
+    //             label: 'Sales',
+    //             data: [12, 19, 15, 22, 30, 25],
+    //             backgroundColor: 'rgba(54, 162, 235, 0.7)'
+    //         }, {
+    //             label: 'Purchases',
+    //             data: [10, 14, 12, 18, 20, 17],
+    //             backgroundColor: 'rgba(255, 99, 132, 0.7)'
+    //         }]
+    //     }
+    // });
+
+     async function loadChart() {
+      const res = await fetch('@Url.Action("GetLast6MonthsReportData", "Home")');
+      const data = await res.json();
+
+      const ctx = document.getElementById('reportChart').getContext('2d');
+      new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-            datasets: [{
-                label: 'Sales',
-                data: [12, 19, 15, 22, 30, 25],
-                backgroundColor: 'rgba(54, 162, 235, 0.7)'
-            }, {
-                label: 'Purchases',
-                data: [10, 14, 12, 18, 20, 17],
-                backgroundColor: 'rgba(255, 99, 132, 0.7)'
-            }]
+          labels: data.labels,
+          datasets: [
+            { label: 'Sales (₹)', data: data.sales, backgroundColor: 'rgba(54,162,235,0.7)' },
+            { label: 'Purchases (₹)', data: data.purchases, backgroundColor: 'rgba(255,99,132,0.7)' }
+          ]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: { callback: v => '₹' + v.toLocaleString() }
+            }
+          },
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: ctx => `${ctx.dataset.label}: ₹${ctx.raw.toLocaleString()}`
+              }
+            }
+          }
         }
-    });
+      });
+    }
+
+    loadChart();
 
     // Dark Mode Toggle
     const body = document.body;
@@ -352,3 +387,5 @@
         updateCounter();
     });
 </script>
+
+

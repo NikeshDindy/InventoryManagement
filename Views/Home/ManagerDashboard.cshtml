@@ -169,11 +169,16 @@
                     <i class="fas fa-clipboard-list fa-2x text-primary mb-3"></i>
                     <h5 class="card-title">Orders</h5>
                     <p class="small text-muted">Manage and approve purchase orders.</p>
-                    <a href="@Url.Action("Index", "Order")" class="btn btn-outline-primary btn-sm">View Orders</a>
-                    <a href="@Url.Action("CreatePurchaseOrder", "Order")" class="btn btn-primary btn-sm">+ New</a>
+
+                    <a href="@Url.Action("Index", "Order")"
+                       class="btn btn-outline-primary btn-sm me-2">View Orders</a>
+
+                    <a href="@Url.Action("CreatePurchaseOrder", "Order")"
+                       class="btn btn-primary btn-sm mt-2">+ New</a>
                 </div>
             </div>
         </div>
+
 
         <!-- Suppliers -->
         <div class="col-lg-3 col-md-6">

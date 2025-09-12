@@ -58,7 +58,7 @@
                             <a asp-action="ApproveOrder" asp-route-id="@order.OrderId"
                                class="btn btn-sm btn-success">Approve</a>
                         }
-                        @if (order.Status != "Cancelled")
+                        @if ((!User.IsInRole("Staff")) && order.Status != "Cancelled")
                         {
                             <a asp-action="CancelOrder" asp-route-id="@order.OrderId"
                                class="btn btn-sm btn-danger ms-1">Cancel</a>

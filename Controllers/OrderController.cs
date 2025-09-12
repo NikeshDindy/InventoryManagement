@@ -62,17 +62,35 @@ namespace InventoryManagement.Controllers
         // =======================
         // CREATE PURCHASE ORDER
         // =======================
-        [Authorize(Roles = "Manager,Admin")]
+        // GET: Create Purchase Order
         public async Task<IActionResult> CreatePurchaseOrder()
         {
             var suppliers = await _unitOfWork.Suppliers.GetAllAsync();
+            var products = await _unitOfWork.Products.GetAllAsync();
+
             ViewBag.Suppliers = new SelectList(suppliers, "SupplierId", "Name");
-            return View();
+
+            var productDtos = products.Select(p => new PurchaseOrderItemDto
+            {
+                ProductId = p.ProductId,
+                SKU = p.SKU,
+                ProductName = p.Name,
+                CategoryName = p.Category?.Name,
+                UnitPrice = p.UnitPrice,
+                Quantity = 0
+            }).ToList();
+
+            var model = new PurchaseOrderDto
+            {
+                Items = productDtos
+            };
+
+            return View(model);
         }
 
+        // POST: Create Purchase Order
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager,Admin")]
         public async Task<IActionResult> CreatePurchaseOrder(PurchaseOrderDto dto)
         {
             if (!ModelState.IsValid)
@@ -82,24 +100,55 @@ namespace InventoryManagement.Controllers
                 return View(dto);
             }
 
-            // Map DTO to actual Order model
+            decimal totalAmount = 0;
+            var orderDetails = new List<OrderDetail>();
+
+            foreach (var item in dto.Items.Where(i => i.Quantity > 0))
+            {
+                var product = await _unitOfWork.Products.GetByIdAsync(item.ProductId);
+                if (product != null)
+                {
+                    decimal lineTotal = item.Quantity * product.UnitPrice;
+                    totalAmount += lineTotal;
+
+                    orderDetails.Add(new OrderDetail
+                    {
+                        ProductId = product.ProductId,
+                        Quantity = item.Quantity,
+                        UnitPrice = product.UnitPrice,
+                        LineTotal = lineTotal
+                    });
+                }
+            }
+
             var order = new Order
             {
                 OrderNumber = dto.OrderNumber,
                 SupplierId = dto.SupplierId,
-                TotalAmount = dto.TotalAmount,
                 OrderType = "Purchase",
                 Status = "Pending",
+                TotalAmount = totalAmount,
                 CreatedByUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? string.Empty,
-                OrderDetails = new List<OrderDetail>(),
+                OrderDetails = orderDetails,
                 InventoryTransactions = new List<InventoryTransaction>()
             };
 
             await _unitOfWork.Orders.AddAsync(order);
             await _unitOfWork.CompleteAsync();
 
+            TempData["Success"] = "Purchase order created successfully!";
             return RedirectToAction(nameof(Index));
         }
+
+
+
+
+
+
+
+
+
+
         // =======================
         // CREATE SALES ORDER (Staff/Manager/Admin)
         // =======================
@@ -127,7 +176,7 @@ namespace InventoryManagement.Controllers
         // APPROVE / CANCEL ORDERS (Manager/Admin)
         // =======================
         //[HttpPost]
-        [Authorize(Roles = "Manager,Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ApproveOrder(int id)
         {
             var order = await _unitOfWork.Orders.GetByIdAsync(id);

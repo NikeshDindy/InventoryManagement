@@ -5,12 +5,11 @@ namespace InventoryManagement.ViewModels
     public class PurchaseOrderDto
     {
         [Required(ErrorMessage = "Order Number is required")]
-        public string OrderNumber { get; set; }
+        public string OrderNumber { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Supplier is required")]
         public int SupplierId { get; set; }
 
-        [Range(0, double.MaxValue, ErrorMessage = "Total must be positive")]
-        public decimal TotalAmount { get; set; }
+        public List<PurchaseOrderItemDto> Items { get; set; } = new List<PurchaseOrderItemDto>();
     }
 }

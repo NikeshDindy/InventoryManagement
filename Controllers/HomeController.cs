@@ -53,8 +53,17 @@ namespace InventoryManagement.Controllers
         }
 
         [Authorize(Roles = "Manager")]
-        public IActionResult ManagerDashboard()
+        public async Task<IActionResult> ManagerDashboard()
         {
+            var orderCount = (await _unitOfWork.Categories.GetAllAsync()).Count();
+            var supplierCount = (await _unitOfWork.Suppliers.GetAllAsync()).Count();
+            var productCount = (await _unitOfWork.Categories.GetAllAsync()).Count();
+            var transactionCount = (await _unitOfWork.Transactions.GetAllAsync()).Count();
+
+            ViewBag.OrderCount = orderCount;
+            ViewBag.SupplierCount = supplierCount;
+            ViewBag.ProductCount = productCount;
+            ViewBag.transactionCount = transactionCount;
             return View();
         }
 

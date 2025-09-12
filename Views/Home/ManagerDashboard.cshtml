@@ -66,6 +66,7 @@
         body.dark-mode .btn-outline-primary:hover {
             background: #90caf9;
             color: #121212;
+
         }
 
     /* Toggle Button */
@@ -114,6 +115,15 @@
         font-size: 1.8rem;
         font-weight: bold;
     }
+
+    .card-body a.btn {
+        text-decoration: none !important;
+    }
+
+        .card-body a.btn:hover {
+            text-decoration: none !important;
+        }
+
 </style>
 
 <div class="container-fluid mt-4">
@@ -170,11 +180,13 @@
                     <h5 class="card-title">Orders</h5>
                     <p class="small text-muted">Manage and approve purchase orders.</p>
 
-                    <a href="@Url.Action("Index", "Order")"
+                    @* <a href="@Url.Action("Index", "Order")"
                        class="btn btn-outline-primary btn-sm me-2">View Orders</a>
 
                     <a href="@Url.Action("CreatePurchaseOrder", "Order")"
-                       class="btn btn-primary btn-sm mt-2">+ New</a>
+                       class="btn btn-primary btn-sm mt-2">+ New</a> *@
+
+                    <a href="@Url.Action("Index", "Order")" class="btn btn-primary btn-sm">Manage</a>
                 </div>
             </div>
         </div>

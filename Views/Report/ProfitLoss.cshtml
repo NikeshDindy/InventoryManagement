@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "Profit & Loss Report";
+    var totalSales = ViewBag.TotalSales as decimal? ?? 0;
+    var totalPurchases = ViewBag.TotalPurchases as decimal? ?? 0;
+    var profitLoss = ViewBag.ProfitLoss as decimal? ?? 0;
+}
+
+<h2>Profit & Loss Report</h2>
+
+<table class="table">
+    <tbody>
+        <tr>
+            <th>Total Sales</th>
+            <td>@totalSales.ToString("C")</td>
+        </tr>
+        <tr>
+            <th>Total Purchases</th>
+            <td>@totalPurchases.ToString("C")</td>
+        </tr>
+        <tr>
+            <th>Profit / Loss</th>
+            <td>@profitLoss.ToString("C")</td>
+        </tr>
+    </tbody>
+</table>

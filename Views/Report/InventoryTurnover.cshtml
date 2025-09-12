@@ -1,0 +1,13 @@
+﻿@{
+    ViewData["Title"] = "Inventory Turnover";
+    var turnoverRatio = ViewBag.Turnover as decimal? ?? 0m;
+}
+
+<h2>Inventory Turnover</h2>
+
+<p>Inventory Turnover Ratio: <strong>@turnoverRatio.ToString("F2")</strong></p>
+
+@if (turnoverRatio == 0)
+{
+    <p>Insufficient data to calculate inventory turnover.</p>
+}

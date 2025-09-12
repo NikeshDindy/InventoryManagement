@@ -1,0 +1,169 @@
+﻿@model IEnumerable<InventoryManagement.Models.Order>
+
+@{
+    ViewData["Title"] = "Orders Dashboard";
+
+    var totalOrders = Model.Count();
+    var pendingOrders = Model.Count(o => o.Status == "Pending");
+    var fulfilledOrders = Model.Count(o => o.Status == "Approved");
+    var cancelledOrders = Model.Count(o => o.Status == "Cancelled");
+    var totalRevenue = Model.Sum(o => o.TotalAmount);
+}
+
+<h2 class="mb-4">Orders Dashboard</h2>
+
+<div class="row mb-4">
+    <div class="col-md-3 mb-3">
+        <div class="card border-light-glow p-3 text-center">
+            <h5>Total Orders</h5>
+            <h2>@totalOrders</h2>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card border-light-glow p-3 text-center">
+            <h5>Pending</h5>
+            <h2>@pendingOrders</h2>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card border-light-glow p-3 text-center">
+            <h5>Approved</h5>
+            <h2>@fulfilledOrders</h2>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card border-light-glow p-3 text-center">
+            <h5>Cancelled</h5>
+            <h2>@cancelledOrders</h2>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-12 mb-3">
+        <div class="card border-light-glow p-3 text-center">
+            <h5>Total Revenue</h5>
+            <h2>@totalRevenue.ToString("C")</h2>
+        </div>
+    </div>
+</div>
+
+@* <div class="row mb-3">
+    <div class="col-md-3">
+        <label for="startDate" class="form-label">Start Date</label>
+        <input type="date" id="startDate" class="form-control" />
+    </div>
+    <div class="col-md-3">
+        <label for="endDate" class="form-label">End Date</label>
+        <input type="date" id="endDate" class="form-control" />
+    </div>
+    <div class="col-md-3">
+        <label for="statusFilter" class="form-label">Status</label>
+        <select id="statusFilter" class="form-select">
+            <option value="">All</option>
+            <option value="Pending">Pending</option>
+            <option value="Fulfilled">Fulfilled</option>
+            <option value="Cancelled">Cancelled</option>
+        </select>
+    </div>
+    <div class="col-md-3 d-flex align-items-end">
+        <button id="filterBtn" class="btn btn-primary w-100">Filter</button>
+    </div>
+</div> *@
+
+<div class="table-responsive mt-4">
+    <table class="table table-hover table-striped border shadow-sm" id="ordersTable">
+        <thead class="table-dark">
+            <tr>
+                <th>Order Number</th>
+                <th>Order Type</th>
+                <th>Status</th>
+                <th>Created At</th>
+                <th>Total Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr class="align-middle">
+                    <td>@order.OrderNumber</td>
+                    <td>@order.OrderType</td>
+                    <td>
+                        <span class="badge
+                            @(order.Status == "Pending" ? "bg-warning text-dark" :
+                                                                                      order.Status == "Approved" ? "bg-success" :
+                                                        order.Status == "Cancelled" ? "bg-danger" : "bg-secondary")">
+                        @order.Status
+                    </span>
+                </td>
+                <td>@order.CreatedAt.ToString("f")</td>
+                <td class="text-primary fw-bold">@order.TotalAmount.ToString("C")</td>
+            </tr>
+                        }
+        </tbody>
+    </table>
+</div>
+
+@section Styles {
+    <style>
+        .border-light-glow {
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+            transition: all 0.3s ease-in-out;
+        }
+
+            .border-light-glow:hover {
+                box-shadow: 0 0 20px rgba(0, 123, 255, 1);
+                transform: translateY(-5px);
+            }
+        /* Card hover effect */
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+        }
+
+        /* Table border lighting on row hover */
+        #ordersTable tbody tr:hover {
+            background-color: #f1f5fb;
+            border-left: 4px solid #0d6efd; /* Bootstrap primary color */
+        }
+
+        /* Badge font size for better readability */
+        .badge {
+            font-size: 0.9rem;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        document.getElementById("filterBtn").addEventListener("click", function () {
+            var start = document.getElementById("startDate").value;
+            var end = document.getElementById("endDate").value;
+            var status = document.getElementById("statusFilter").value;
+
+            var rows = document.querySelectorAll("#ordersTable tbody tr");
+
+            rows.forEach(row => {
+                var orderDate = new Date(row.cells[3].textContent);
+                var rowStatus = row.cells[2].textContent;
+
+                var show = true;
+
+                if (start) {
+                    show &= (orderDate >= new Date(start));
+                }
+                if (end) {
+                    show &= (orderDate <= new Date(end));
+                }
+                if (status) {
+                    show &= (rowStatus === status);
+                }
+
+                row.style.display = show ? "" : "none";
+            });
+        });
+    </script>
+}

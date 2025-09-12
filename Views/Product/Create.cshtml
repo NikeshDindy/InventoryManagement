@@ -1,0 +1,45 @@
+﻿@model InventoryManagement.ViewModels.CreateProductDto
+@{
+    ViewData["Title"] = "Create Product";
+}
+<h2>Create Product</h2>
+<form asp-action="Create" method="post">
+    @* <div asp-validation-summary="ModelOnly" class="text-danger"></div> *@
+    <div class="mb-3">
+        <label asp-for="SKU" class="form-label"></label>
+        <input asp-for="SKU" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+    </div>
+    <div class="mb-3">
+        <label asp-for="UnitPrice" class="form-label"></label>
+        <input asp-for="UnitPrice" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="StockQuantity" class="form-label"></label>
+        <input asp-for="StockQuantity" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="LowStockThreshold" class="form-label"></label>
+        <input asp-for="LowStockThreshold" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="CategoryId" class="form-label"></label>
+        <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-control"></select>
+    </div>
+    <div class="mb-3">
+        <label asp-for="SupplierId" class="form-label"></label>
+        <select asp-for="SupplierId" asp-items="ViewBag.Suppliers" class="form-control"></select>
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,83 @@
+﻿@model IEnumerable<InventoryManagement.Models.Order>
+
+@{
+    ViewData["Title"] = "Orders";
+}
+
+<h2>Orders</h2>
+
+<!-- 🔹 Quick Actions -->
+<div class="mb-3">
+    @if (User.IsInRole("Manager") || User.IsInRole("Admin"))
+    {
+        <a asp-action="CreatePurchaseOrder" class="btn btn-primary me-2">
+            <i class="bi bi-cart-plus"></i> Create Purchase Order
+        </a>
+    }
+
+    @* @if (User.IsInRole("Staff"))
+    {
+        <a asp-action="CreateSalesOrder" class="btn btn-secondary">
+            <i class="bi bi-bag-plus"></i> Create Sales Order
+        </a>
+    } *@
+</div>
+
+<!-- 🔹 Orders as Cards -->
+<div class="row">
+    @foreach (var order in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100 border-0 order-card">
+                <div class="card-body">
+                    <h5 class="card-title">Order #: @order.OrderNumber</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">@order.OrderType</h6>
+
+                    <p>
+                        <strong>Status:</strong>
+                        @if (order.Status == "Pending")
+                        {
+                            <span class="badge bg-warning text-dark">Pending</span>
+                        }
+                        else if (order.Status == "Cancelled")
+                        {
+                            <span class="badge bg-danger">Cancelled</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-success">Approved</span>
+                        }
+                        <br />
+                        <strong>Date:</strong> @order.CreatedAt.ToShortDateString() <br />
+                        <strong>Total:</strong> @order.TotalAmount.ToString("C")
+                    </p>
+
+                    <div class="mt-3">
+                        @if (User.IsInRole("Admin") && order.Status == "Pending")
+                        {
+                            <a asp-action="ApproveOrder" asp-route-id="@order.OrderId"
+                               class="btn btn-sm btn-success">Approve</a>
+                        }
+                        @if (order.Status != "Cancelled" && (User.IsInRole("Admin") || User.IsInRole("Manager")))
+                        {
+                            <a asp-action="CancelOrder" asp-route-id="@order.OrderId"
+                               class="btn btn-sm btn-danger ms-1">Cancel</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- 🔹 Card Hover Styling -->
+<style>
+    .order-card {
+        transition: transform 0.2s ease, box-shadow 0.3s ease;
+    }
+
+        .order-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 20px rgba(0,0,0,0.2);
+        }
+</style>

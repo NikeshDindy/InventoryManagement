@@ -1,0 +1,90 @@
+﻿@model InventoryManagement.ViewModels.PurchaseOrderDto
+@{
+    ViewData["Title"] = "Create Purchase Order";
+}
+
+<h2>Create Purchase Order</h2>
+
+<form asp-action="CreatePurchaseOrder" method="post">
+    <div class="mb-3">
+        <label asp-for="OrderNumber" class="form-label"></label>
+        <input asp-for="OrderNumber" class="form-control" />
+        <span asp-validation-for="OrderNumber" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="SupplierId" class="form-label">Supplier</label>
+        <select asp-for="SupplierId" class="form-control" asp-items="ViewBag.Suppliers">
+            <option value="">-- Select Supplier --</option>
+        </select>
+        <span asp-validation-for="SupplierId" class="text-danger"></span>
+    </div>
+
+    <h4 class="mt-4">Products</h4>
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>SKU</th>
+                <th>Name</th>
+                @* <th>Category</th> *@
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Line Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Items.Count; i++)
+            {
+                <tr>
+                    <td>
+                        @Model.Items[i].SKU
+                        <input type="hidden" asp-for="Items[@i].ProductId" />
+                        <input type="hidden" asp-for="Items[@i].SKU" />
+                        <input type="hidden" asp-for="Items[@i].ProductName" />
+                        @* <input type="hidden" asp-for="Items[@i].CategoryName" /> *@
+                        <input type="hidden" asp-for="Items[@i].UnitPrice" />
+                    </td>
+                    <td>@Model.Items[i].ProductName</td>
+                    @* <td>@Model.Items[i].CategoryName</td> *@
+                    <td>@Model.Items[i].UnitPrice.ToString("C")</td>
+                    <td>
+                        <input asp-for="Items[@i].Quantity" class="form-control qty-input" data-price="@Model.Items[i].UnitPrice" />
+                        <span asp-validation-for="Items[@i].Quantity" class="text-danger"></span>
+                    </td>
+                    <td class="line-total">0.00</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="5" class="text-end"><strong>Grand Total:</strong></td>
+                <td id="grand-total">0.00</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function recalcTotals() {
+            let grandTotal = 0;
+            document.querySelectorAll("tbody tr").forEach(row => {
+                let qtyInput = row.querySelector(".qty-input");
+                let price = parseFloat(qtyInput.dataset.price);
+                let qty = parseInt(qtyInput.value) || 0;
+                let lineTotal = qty * price;
+                row.querySelector(".line-total").innerText = lineTotal.toFixed(2);
+                grandTotal += lineTotal;
+            });
+            document.getElementById("grand-total").innerText = grandTotal.toFixed(2);
+        }
+
+        document.querySelectorAll(".qty-input").forEach(input => {
+            input.addEventListener("input", recalcTotals);
+        });
+    </script>
+}

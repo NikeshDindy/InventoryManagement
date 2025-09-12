@@ -1,0 +1,76 @@
+﻿@model InventoryManagement.ViewModels.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Register New User";
+}
+
+<!-- Include page-specific CSS -->
+<link rel="stylesheet" href="~/css/register.css" />
+
+<div class="register-page-wrapper">
+    <form asp-action="Register" method="post" class="register-form">
+        @Html.AntiForgeryToken()
+
+        <h2>Register New User</h2>
+
+        @* <!-- Success / Error messages -->
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success">@TempData["Success"]</div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger">@TempData["Error"]</div>
+        } *@
+
+        <!-- Validation summary -->
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <!-- Full Name -->
+        <div class="form-group mb-3">
+            <label asp-for="FullName" class="form-label"></label>
+            <input asp-for="FullName" id="FullName" class="form-control" placeholder="Enter full name" />
+            <span asp-validation-for="FullName" class="text-danger"></span>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group mb-3">
+            <label asp-for="Email" class="form-label"></label>
+            <input asp-for="Email" id="Email" class="form-control" placeholder="        Enter email" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <!-- Password -->
+        <div class="form-group mb-3">
+            <label asp-for="Password" class="form-label"></label>
+            <input asp-for="Password" id="Password" class="form-control" type="password" placeholder="      Enter password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="form-group mb-3">
+            <label asp-for="ConfirmPassword" class="form-label"></label>
+            <input asp-for="ConfirmPassword" id="ConfirmPassword" class="form-control" type="password" placeholder="Confirm password" />
+            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+        </div>
+
+        <!-- Role Dropdown -->
+        <div class="form-group mb-3">
+            <label asp-for="Role" class="form-label"></label>
+            <select asp-for="Role" class="form-select">
+                <option value="">-- Select Role --</option>
+                <option value="Admin">Admin</option>
+                <option value="Manager">Manager</option>
+                <option value="Staff">Staff</option>
+            </select>
+            <span asp-validation-for="Role" class="text-danger"></span>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary">Register</button>
+    </form>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

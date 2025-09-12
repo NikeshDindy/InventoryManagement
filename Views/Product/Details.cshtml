@@ -1,0 +1,31 @@
+﻿@model InventoryManagement.ViewModels.ProductDto
+@{
+    ViewData["Title"] = "Product Details";
+}
+<h2>Product Details</h2>
+<div>
+    <dl class="row">
+        <dt class="col-sm-3">SKU</dt>
+        <dd class="col-sm-9">@Model.SKU</dd>
+        <dt class="col-sm-3">Name</dt>
+        <dd class="col-sm-9">@Model.Name</dd>
+        <dt class="col-sm-3">Description</dt>
+        <dd class="col-sm-9">@Model.Description</dd>
+        <dt class="col-sm-3">Unit Price</dt>
+        <dd class="col-sm-9">@Model.UnitPrice</dd>
+        <dt class="col-sm-3">Stock</dt>
+        <dd class="col-sm-9">@Model.StockQuantity</dd>
+        <dt class="col-sm-3">Low Stock Threshold</dt>
+        <dd class="col-sm-9">@Model.LowStockThreshold</dd>
+        <dt class="col-sm-3">Category</dt>
+        <dd class="col-sm-9">@Model.CategoryName</dd>
+        <dt class="col-sm-3">Supplier</dt>
+        <dd class="col-sm-9">@Model.SupplierName</dd>
+    </dl>
+    <a asp-action="Edit" asp-route-id="@Model.ProductId" class="btn btn-primary">Edit</a>
+    <a asp-action="Index" class="btn btn-secondary">Back</a>
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-action="Delete" asp-route-id="@Model.ProductId" class="btn btn-danger">Delete</a>
+    }
+</div>

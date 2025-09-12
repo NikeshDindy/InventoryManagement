@@ -1,0 +1,12 @@
+﻿@model InventoryManagement.Models.Order
+@{
+    ViewData["Title"] = "Cancel Order";
+}
+<h2>Cancel Order - @Model.OrderNumber</h2>
+<p>Are you sure you want to cancel this order?</p>
+
+<form asp-action="CancelOrder" method="post">
+    <input type="hidden" asp-for="OrderId" />
+    <button type="submit" class="btn btn-danger">Yes, Cancel</button>
+    <a asp-action="Details" asp-route-id="@Model.OrderId" class="btn btn-secondary">Back to Details</a>
+</form>

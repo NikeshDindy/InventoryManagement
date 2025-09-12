@@ -1,0 +1,98 @@
+﻿@model IEnumerable<InventoryManagement.ViewModels.ProductDto>
+
+@{
+    ViewData["Title"] = "Stock Summary";
+}
+
+<h2 class="mb-4">📦 Stock Summary</h2>
+
+<!-- Cards Layout -->
+<div class="row">
+    @foreach (var product in Model)
+    {
+        var stockStatus = product.StockQuantity == 0 ? "Out of Stock" :
+        product.StockQuantity <= product.LowStockThreshold ? "Low Stock" : "In Stock";
+
+        var badgeClass = stockStatus == "Out of Stock" ? "bg-danger" :
+        stockStatus == "Low Stock" ? "bg-warning text-dark" : "bg-success";
+
+        <div class="col-md-4 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">@product.Name</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">SKU: @product.SKU</h6>
+                    <p class="mb-1"><strong>Category:</strong> @product.CategoryName</p>
+                    <p class="mb-1"><strong>Supplier:</strong> @product.SupplierName</p>
+                    <p class="mb-1">
+                        <strong>Stock:</strong>
+                        <span class="badge @badgeClass">
+                            @product.StockQuantity
+                        </span>
+                    </p>
+                    <p class="mb-0">
+                        <strong>Low Threshold:</strong> @product.LowStockThreshold
+                    </p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<hr />
+
+@* <!-- Table Layout -->
+<div class="table-responsive mt-4">
+    <table class="table table-hover table-striped border shadow-sm" id="stockTable">
+        <thead class="table-dark">
+            <tr>
+                <th>SKU</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Supplier</th>
+                <th>Stock Quantity</th>
+                <th>Low Stock Threshold</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model)
+            {
+                var badgeClass = product.StockQuantity == 0 ? "bg-danger" :
+                product.StockQuantity <= product.LowStockThreshold ? "bg-warning text-dark" : "bg-success";
+
+                <tr>
+                    <td>@product.SKU</td>
+                    <td>@product.Name</td>
+                    <td>@product.CategoryName</td>
+                    <td>@product.SupplierName</td>
+                    <td>
+                        <span class="badge @badgeClass">@product.StockQuantity</span>
+                    </td>
+                    <td>@product.LowStockThreshold</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div> *@
+
+@section Styles {
+    <style>
+        /* Card hover effect */
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 0.8rem 1.2rem rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+        }
+
+        /* Table row hover lighting */
+        #stockTable tbody tr:hover {
+            background-color: #f8f9fa;
+            border-left: 4px solid #0d6efd; /* Bootstrap primary color */
+        }
+
+        /* Badge size */
+        .badge {
+            font-size: 0.9rem;
+            padding: 0.5em 0.75em;
+        }
+    </style>
+}

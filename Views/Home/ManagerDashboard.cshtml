@@ -1,0 +1,431 @@
+﻿@{
+    ViewData["Title"] = "Manager Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+<style>
+    /* Light & Dark Theme Base */
+    body.light-mode {
+        background-color: #f8f9fa;
+        color: #212529;
+    }
+
+    body.dark-mode {
+        background-color: #121212;
+        color: #e0e0e0;
+    }
+
+    /* Dashboard Title */
+    h2 {
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
+
+    /* Card Styles */
+    .card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease, color 0.3s ease;
+        border-radius: 15px;
+    }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+    body.dark-mode .card {
+        background: #1e1e1e;
+        color: #e0e0e0;
+    }
+
+    .card-body i {
+        transition: transform 0.3s ease;
+    }
+
+    .card:hover i {
+        transform: scale(1.2);
+    }
+
+    .card-body .btn {
+        border-radius: 20px;
+        font-size: 0.85rem;
+        padding: 6px 14px;
+    }
+    /* Text Muted for Dark Mode */
+    body.dark-mode .text-muted {
+        color: #f5f5f5 !important; /* soft white */
+    }
+
+    /* Dark Mode Adjustments */
+    body.dark-mode .btn-outline-primary {
+        color: #90caf9;
+        border-color: #90caf9;
+    }
+
+        body.dark-mode .btn-outline-primary:hover {
+            background: #90caf9;
+            color: #121212;
+
+        }
+
+    /* Toggle Button */
+    .dark-mode-toggle {
+        float: right;
+        margin-top: -15px;
+        margin-right: 15px;
+    }
+
+        .dark-mode-toggle button {
+            border: none;
+            background: transparent;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #555;
+        }
+
+    body.dark-mode .dark-mode-toggle button {
+        color: #f5f5f5;
+    }
+
+    /* Timeline */
+    .timeline {
+        list-style: none;
+        padding-left: 10px;
+        position: relative;
+    }
+
+        .timeline li {
+            margin-bottom: 12px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+            .timeline li::before {
+                content: "•";
+                color: #007bff;
+                position: absolute;
+                left: 0;
+                font-size: 20px;
+                top: -2px;
+            }
+
+    /* Counter Styles */
+    .counter {
+        font-size: 1.8rem;
+        font-weight: bold;
+    }
+
+    .card-body a.btn {
+        text-decoration: none !important;
+    }
+
+        .card-body a.btn:hover {
+            text-decoration: none !important;
+        }
+
+</style>
+
+<div class="container-fluid mt-4">
+    <div class="d-flex justify-content-between align-items-center">
+        <h2 class="mb-4 text-primary"><i class="fas fa-user-tie"></i> Manager Dashboard</h2>
+        <div class="dark-mode-toggle">
+            <button id="toggleDarkMode" title="Toggle Dark Mode">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Greeting & Clock -->
+    <div class="alert alert-info shadow-sm">
+        <h5 id="greeting"></h5>
+        <p><i class="fas fa-clock"></i> <span id="liveClock"></span></p>
+    </div>
+
+    <!-- Animated Counters -->
+    <div class="row g-4 mt-2">
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 text-center p-3">
+                <h6 class="text-primary"><i class="fas fa-clipboard-list"></i> Orders</h6>
+                <h3 class="counter" data-target="@ViewBag.OrderCount">0</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 text-center p-3">
+                <h6 class="text-success"><i class="fas fa-truck"></i> Suppliers</h6>
+                <h3 class="counter" data-target="@ViewBag.SupplierCount">0</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 text-center p-3">
+                <h6 class="text-warning"><i class="fas fa-box-open"></i> Products</h6>
+                <h3 class="counter" data-target="@ViewBag.ProductCount">0</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 text-center p-3">
+                <h6 class="text-danger"><i class="fas fa-exchange-alt"></i> Transactions</h6>
+                <h3 class="counter" data-target="@ViewBag.transactionCount">0</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- First Row -->
+    <div class="row g-4 mt-4">
+        <!-- Orders -->
+        <div class="col-lg-3 col-md-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-clipboard-list fa-2x text-primary mb-3"></i>
+                    <h5 class="card-title">Orders</h5>
+                    <p class="small text-muted">Manage and approve purchase orders.</p>
+
+                    @* <a href="@Url.Action("Index", "Order")"
+                       class="btn btn-outline-primary btn-sm me-2">View Orders</a>
+
+                    <a href="@Url.Action("CreatePurchaseOrder", "Order")"
+                       class="btn btn-primary btn-sm mt-2">+ New</a> *@
+
+                    <a href="@Url.Action("Index", "Order")" class="btn btn-primary btn-sm">Manage</a>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Suppliers -->
+        <div class="col-lg-3 col-md-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-truck fa-2x text-success mb-3"></i>
+                    <h5 class="card-title">Suppliers</h5>
+                    <p class="small text-muted">Add or update supplier details.</p>
+                    <a href="@Url.Action("Index", "Supplier")" class="btn btn-success btn-sm">Manage</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products -->
+        <div class="col-lg-3 col-md-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-box-open fa-2x text-warning mb-3"></i>
+                    <h5 class="card-title">Products</h5>
+                    <p class="small text-muted">View and update product inventory.</p>
+                    <a href="@Url.Action("Index", "Product")" class="btn btn-warning btn-sm text-white">Manage</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Transactions -->
+        <div class="col-lg-3 col-md-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-exchange-alt fa-2x text-danger mb-3"></i>
+                    <h5 class="card-title">Transactions</h5>
+                    <p class="small text-muted">Track stock movement and approvals.</p>
+                    <a href="@Url.Action("Index", "Transaction")" class="btn btn-danger btn-sm">View</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Second Row -->
+    <div class="row g-4 mt-3 mb-5">
+        <!-- Reports -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-chart-line text-info"></i> Reports</h5>
+                    <canvas id="reportChart" height="150"></canvas>
+                    <a href="@Url.Action("Index", "Report")" class="btn btn-info btn-sm mt-3 text-white">View Detailed Reports</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 h-100">
+                @* <div class="card-body text-center">
+                    <i class="fas fa-user-circle fa-3x text-secondary mb-3"></i>
+                    <h5 class="card-title">My Profile</h5>
+                    <p>@User.Identity.Name</p>
+                    <p class="text-muted">Update account information and password.</p>
+                    <a href="@Url.Action("Manage", "Account")" class="btn btn-secondary btn-sm">Edit Profile</a>
+                </div> *@
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-history text-secondary"></i> Recent Activity</h5>
+                    @* <ul class="timeline">
+                        <li><span>✔️ Order #123 approved</span> <small>2 mins ago</small></li>
+                        <li><span>📦 New product added: Laptop</span> <small>10 mins ago</small></li>
+                        <li><span>👤 Supplier "ABC Traders" updated</span> <small>30 mins ago</small></li>
+                        <li><span>💰 Purchase Order #98 created</span> <small>1 hr ago</small></li>
+                    </ul> *@
+                    <ul id="recentActivity" class="timeline"></ul>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+@{
+    // safely compute the display name on the server
+    var email = User?.Identity?.Name ?? "";
+    // get the part before '@'
+    var username = email.Contains("@") ? email.Split('@')[0] : email;
+
+    // take only the first token before dot/underscore/hyphen (e.g. "banti.mandal" -> "banti")
+    var separators = new char[] { '.', '_', '-' };
+    var tokenIndex = username.IndexOfAny(separators);
+    var firstName = tokenIndex >= 0 ? username.Substring(0, tokenIndex) : username;
+
+    // capitalize first letter
+    if (!string.IsNullOrWhiteSpace(firstName))
+    {
+        firstName = char.ToUpper(firstName[0]) + (firstName.Length > 1 ? firstName.Substring(1) : "");
+    }
+    else
+    {
+        firstName = "User";
+    }
+}
+
+<!-- Chart.js -->
+ <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // var ctx = document.getElementById('reportChart').getContext('2d');
+    // var reportChart = new Chart(ctx, {
+    //     type: 'bar',
+    //     data: {
+    //         labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+    //         datasets: [{
+    //             label: 'Sales',
+    //             data: [12, 19, 15, 22, 30, 25],
+    //             backgroundColor: 'rgba(54, 162, 235, 0.7)'
+    //         }, {
+    //             label: 'Purchases',
+    //             data: [10, 14, 12, 18, 20, 17],
+    //             backgroundColor: 'rgba(255, 99, 132, 0.7)'
+    //         }]
+    //     }
+    // });
+
+     async function loadChart() {
+      const res = await fetch('@Url.Action("GetLast6MonthsReportData", "Home")');
+      const data = await res.json();
+
+      const ctx = document.getElementById('reportChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: data.labels,
+          datasets: [
+            { label: 'Sales (₹)', data: data.sales, backgroundColor: 'rgba(54,162,235,0.7)' },
+            { label: 'Purchases (₹)', data: data.purchases, backgroundColor: 'rgba(255,99,132,0.7)' }
+          ]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: { callback: v => '₹' + v.toLocaleString() }
+            }
+          },
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: ctx => `${ctx.dataset.label}: ₹${ctx.raw.toLocaleString()}`
+              }
+            }
+          }
+        }
+      });
+    }
+
+    loadChart();
+
+    //Code to update Recent activity
+    async function loadRecentActivity() {
+        const res = await fetch('@Url.Action("GetRecentActivity", "Home")');
+        const data = await res.json();
+
+        const container = document.getElementById("recentActivity");
+        container.innerHTML = "";
+
+        data.forEach(item => {
+            const ts = new Date(item.timestamp).toLocaleString();
+            const icon = item.type === "IN" ? "📥" : "📤";
+
+            const li = document.createElement("li");
+            li.innerHTML = `
+                <span>${icon} ${item.type} - ${item.quantity} x ${item.productName}</span>
+                <small>${ts} by ${item.user}</small>
+            `;
+
+            container.appendChild(li);
+        });
+    }
+
+
+    loadRecentActivity();
+
+
+    // Dark Mode Toggle
+    const body = document.body;
+    const toggleBtn = document.getElementById("toggleDarkMode");
+
+    toggleBtn.addEventListener("click", () => {
+        body.classList.toggle("dark-mode");
+        body.classList.toggle("light-mode");
+        toggleBtn.innerHTML = body.classList.contains("dark-mode")
+            ? '<i class="fas fa-sun"></i>'
+            : '<i class="fas fa-moon"></i>';
+    });
+
+    // Default to light mode
+    body.classList.add("light-mode");
+
+    // Greeting & Clock
+    // Inject server-computed name as a JSON string (safe escaping)
+    const userName = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(firstName));
+
+    // Greeting & Live Clock
+    function updateClock() {
+        const now = new Date();
+        document.getElementById("liveClock").innerText = now.toLocaleTimeString();
+
+        const hour = now.getHours();
+        let greetingText = `Hello, ${userName}!`;
+        if (hour < 12) greetingText = `🌅 Good Morning, ${userName}!`;
+        else if (hour < 18) greetingText = `☀️ Good Afternoon, ${userName}!`;
+        else greetingText = `🌙 Good Evening, ${userName}!`;
+
+        document.getElementById("greeting").innerText = greetingText;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Counter Animation
+    const counters = document.querySelectorAll('.counter');
+    counters.forEach(counter => {
+        counter.innerText = '0';
+        const updateCounter = () => {
+            const target = +counter.getAttribute('data-target');
+            const count = +counter.innerText;
+            const increment = target / 200;
+            if (count < target) {
+                counter.innerText = Math.ceil(count + increment);
+                setTimeout(updateCounter, 10);
+            } else {
+                counter.innerText = target;
+            }
+        };
+        updateCounter();
+    });
+</script>
+
+

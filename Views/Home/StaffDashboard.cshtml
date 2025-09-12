@@ -1,0 +1,333 @@
+﻿@{
+    ViewData["Title"] = "Staff Dashboard";
+}
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+<style>
+    /* Light & Dark Theme Base */
+    body.staff-light {
+        background-color: #f8f9fa;
+        color: #212529;
+    }
+
+    body.staff-dark {
+        background-color: #121212;
+        color: #e0e0e0;
+    }
+
+    h2 {
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
+
+    /* Card Styles */
+    .card {
+        border-radius: 15px;
+        transition: transform 0.2s ease, box-shadow 0.3s ease, background 0.3s ease, color 0.3s ease;
+        position: relative;
+    }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.25);
+        }
+
+    body.staff-dark .card {
+        background: #1e1e1e;
+        color: #e0e0e0;
+    }
+
+    /* Card Icons */
+    .card i {
+        transition: transform 0.3s ease, color 0.3s ease, text-shadow 0.3s ease;
+    }
+
+    .card:hover i {
+        transform: scale(1.3);
+        text-shadow: 0 0 8px rgba(255,255,255,0.6);
+    }
+
+    /* Glowing button */
+    .btn-go {
+        border-radius: 20px;
+        font-size: 0.85rem;
+        padding: 6px 14px;
+        transition: transform 0.2s ease, box-shadow 0.3s ease, background 0.3s ease;
+    }
+
+        .btn-go:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2), 0 0 10px rgba(255,255,255,0.3);
+        }
+
+    /* Colored icons */
+    .icon-products {
+        color: #0d6efd;
+    }
+
+    .icon-categories {
+        color: #198754;
+    }
+
+    .icon-suppliers {
+        color: #0dcaf0;
+    }
+
+    .icon-orders {
+        color: #ffc107;
+    }
+
+    .icon-transactions {
+        color: #6c757d;
+    }
+
+    body.staff-dark .text-muted {
+        color: #f5f5f5 !important;
+    }
+
+    /* Dark Mode Toggle */
+    .dark-mode-toggle {
+        float: right;
+        margin-top: -15px;
+        margin-right: 15px;
+    }
+
+        .dark-mode-toggle button {
+            border: none;
+            background: transparent;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #555;
+        }
+
+    body.staff-dark .dark-mode-toggle button {
+        color: #f5f5f5;
+    }
+
+    /* Greeting & Clock */
+    .greeting-box {
+        padding: 15px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        text-align: center;
+        background-color: #e9ecef;
+        transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    body.staff-dark .greeting-box {
+        background-color: #2a2a2a;
+        color: #f5f5f5;
+    }
+
+    .counter {
+        font-size: 2rem;
+        font-weight: bold;
+        margin-top: 5px;
+    }
+
+    .btn-go {
+        border-radius: 20px;
+        font-size: 0.85rem;
+        padding: 6px 14px;
+        font-weight: 600;
+        color: white;
+        background: linear-gradient(45deg, #007bff, #00c6ff);
+        border: none;
+        transition: transform 0.2s ease, box-shadow 0.3s ease, background 0.3s ease;
+    }
+
+        .btn-go:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3), 0 0 12px rgba(0, 198, 255, 0.5);
+            background: linear-gradient(45deg, #0056b3, #0096c7);
+        }
+
+    body.staff-dark .btn-go {
+        background: linear-gradient(45deg, #6610f2, #6f42c1);
+    }
+
+        body.staff-dark .btn-go:hover {
+            background: linear-gradient(45deg, #520dc2, #5a2d91);
+        }
+
+
+    .btn-go {
+        text-decoration: none !important;
+    }
+
+        .btn-go:hover {
+            text-decoration: none !important;
+        }
+
+
+</style>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center">
+        <h2>@ViewData["Title"]</h2>
+        <div class="dark-mode-toggle">
+            <button id="toggleDarkMode" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+        </div>
+    </div>
+
+    <!-- Greeting & Live Clock -->
+    <div class="greeting-box">
+        <h5 id="greeting">Hello Staff!</h5>
+        <p><i class="fas fa-clock"></i> <span id="liveClock"></span></p>
+    </div>
+
+    <!-- Counters -->
+    <div class="row g-4 mt-3">
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center p-3">
+                <i class="fas fa-box-open fa-2x icon-products mb-2"></i>
+                <h6>Products</h6>
+                <h3 class="counter" data-target="@ViewBag.ProductCount">0</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center p-3">
+                <i class="fas fa-tags fa-2x icon-categories mb-2"></i>
+                <h6>Categories</h6>
+                <h3 class="counter" data-target="@ViewBag.CategoryCount">0</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center p-3">
+                <i class="fas fa-truck fa-2x icon-suppliers mb-2"></i>
+                <h6>Suppliers</h6>
+                <h3 class="counter" data-target="@ViewBag.SupplierCount">0</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center p-3">
+                <i class="fas fa-clipboard-list fa-2x icon-orders mb-2"></i>
+                <h6>Orders</h6>
+                <h3 class="counter" data-target="@ViewBag.OrderCount">0</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Cards -->
+    <div class="row g-4 mt-4">
+        <div class="col-md-3">
+            <div class="card shadow-sm h-100 text-center p-3">
+                <i class="fas fa-box-open fa-2x icon-products mb-3"></i>
+                <h5 class="card-title">Products</h5>
+                <p class="small text-muted flex-grow-1">Browse available products and stock levels.</p>
+                <a asp-controller="Product" asp-action="Index" class="btn btn-go mt-auto">View</a>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm h-100 text-center p-3">
+                <i class="fas fa-tags fa-2x icon-categories mb-3"></i>
+                <h5 class="card-title">Categories</h5>
+                <p class="small text-muted flex-grow-1">See all product categories.</p>
+                <a asp-controller="Category" asp-action="Index" class="btn btn-go mt-auto">View</a>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm h-100 text-center p-3">
+                <i class="fas fa-truck fa-2x icon-suppliers mb-3"></i>
+                <h5 class="card-title">Suppliers</h5>
+                <p class="small text-muted flex-grow-1">View the supplier list.</p>
+                <a asp-controller="Supplier" asp-action="Index" class="btn btn-go mt-auto">View</a>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm h-100 text-center p-3">
+                <i class="fas fa-clipboard-list fa-2x icon-orders mb-3"></i>
+                <h5 class="card-title">Orders</h5>
+                <p class="small text-muted flex-grow-1">View all purchase and sales orders.</p>
+                <a asp-controller="Order" asp-action="Index" class="btn btn-go mt-auto">View</a>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm h-100 text-center p-3">
+                <i class="fas fa-exchange-alt fa-2x icon-transactions mb-3"></i>
+                <h5 class="card-title">Transactions</h5>
+                <p class="small text-muted flex-grow-1">View all inventory transactions.</p>
+                <a asp-controller="Transaction" asp-action="Index" class="btn btn-go mt-auto">View</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@{
+    // safely compute the display name on the server
+    var email = User?.Identity?.Name ?? "";
+    // get the part before '@'
+    var username = email.Contains("@") ? email.Split('@')[0] : email;
+
+    // take only the first token before dot/underscore/hyphen (e.g. "banti.mandal" -> "banti")
+    var separators = new char[] { '.', '_', '-' };
+    var tokenIndex = username.IndexOfAny(separators);
+    var firstName = tokenIndex >= 0 ? username.Substring(0, tokenIndex) : username;
+
+    // capitalize first letter
+    if (!string.IsNullOrWhiteSpace(firstName))
+    {
+        firstName = char.ToUpper(firstName[0]) + (firstName.Length > 1 ? firstName.Substring(1) : "");
+    }
+    else
+    {
+        firstName = "User";
+    }
+}
+<script>
+    // Dark Mode Toggle
+    const body = document.body;
+    const toggleBtn = document.getElementById("toggleDarkMode");
+    toggleBtn.addEventListener("click", () => {
+        body.classList.toggle("staff-dark");
+        body.classList.toggle("staff-light");
+        toggleBtn.innerHTML = body.classList.contains("staff-dark")
+            ? '<i class="fas fa-sun"></i>'
+            : '<i class="fas fa-moon"></i>';
+    });
+    body.classList.add("staff-light");
+
+    // Counter Animation
+    const counters = document.querySelectorAll('.counter');
+    counters.forEach(counter => {
+        counter.innerText = '0';
+        const updateCounter = () => {
+            const target = +counter.getAttribute('data-target');
+            const count = +counter.innerText;
+            const increment = target / 200;
+            if (count < target) {
+                counter.innerText = Math.ceil(count + increment);
+                setTimeout(updateCounter, 10);
+            } else {
+                counter.innerText = target;
+            }
+        };
+        updateCounter();
+    });
+
+    // Greeting & Live Clock
+    // Inject server-computed name as a JSON string (safe escaping)
+    const userName = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(firstName));
+
+    // Greeting & Live Clock
+    function updateClock() {
+        const now = new Date();
+        document.getElementById("liveClock").innerText = now.toLocaleTimeString();
+
+        const hour = now.getHours();
+        let greetingText = `Hello, ${userName}!`;
+        if (hour < 12) greetingText = `🌅 Good Morning, ${userName}!`;
+        else if (hour < 18) greetingText = `☀️ Good Afternoon, ${userName}!`;
+        else greetingText = `🌙 Good Evening, ${userName}!`;
+
+        document.getElementById("greeting").innerText = greetingText;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+</script>

@@ -1,0 +1,31 @@
+﻿@{
+    ViewData["Title"] = "Record Purchase";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="RecordPurchase" method="post">
+    <div class="form-group mb-3">
+        <label for="productId">Select Product</label>
+        <select id="productId" name="productId" class="form-control" asp-items="ViewBag.Products">
+            <option value="">-- Select a Product --</option>
+        </select>
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="quantity">Quantity</label>
+        <input type="number" name="quantity" class="form-control" min="1" />
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="notes">Notes</label>
+        <textarea name="notes" class="form-control"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-success">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

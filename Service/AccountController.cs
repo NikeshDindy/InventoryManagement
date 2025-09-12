@@ -3,6 +3,7 @@ using InventoryManagement.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace InventoryManagement.Controllers
 {
@@ -125,5 +126,50 @@ namespace InventoryManagement.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //[Authorize(Roles = "Admin")]
+        //public async Task<IActionResult> RemoveUser(string id)
+        //{
+        //    Console.WriteLine("----------------------------------inside the remove user controller");
+
+        //    if (string.IsNullOrEmpty(id))
+        //    {
+        //        Console.WriteLine("-----------------------------------------------------------User ID is null or empty."); 
+        //        TempData["Error"] = "Invalid user ID";
+        //        return RedirectToAction("AdminDashboard", "Home");
+        //    }
+
+        //    var user = await _userManager.FindByIdAsync(id);
+        //    if (user == null)
+        //    {
+        //        Console.WriteLine("-----------------------------------------------------------User is null or empty.");
+        //        TempData["Error"] = "User not found";
+        //        return RedirectToAction("AdminDashboard", "Home");
+        //    }
+
+        //    try
+        //    {
+        //        var result = await _userManager.DeleteAsync(user);
+        //        if (result.Succeeded)
+        //        {
+        //            Console.WriteLine("-----------------------------------------------------------User removed successfully.");
+        //            TempData["Success"] = "User removed successfully!";
+        //        }
+        //        else
+        //        {
+        //            Console.WriteLine("---------------------inside catch block--------------------------------------User removed canceleled.");
+        //            TempData["Error"] = string.Join(", ", result.Errors.Select(e => e.Description));
+        //        }
+        //    }
+        //    catch (DbUpdateException)
+        //    {
+        //        TempData["Error"] = "Cannot remove user due to related data.";
+        //    }
+
+        //    return RedirectToAction("AdminDashboard", "Home");
+        //}
+
     }
 }

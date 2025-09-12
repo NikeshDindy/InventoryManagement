@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/InventoryManagement.styles.css" asp-append-version="true" />
+    @RenderSection("Styles", required: false)
+
 </head>
 <body>
     <header>
@@ -19,13 +21,20 @@
                         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <!-- Privacy removed -->
+
+                        @* Only show Accounts dropdown to Admin users *@
+                        @if (User.IsInRole("Admin"))
+                        {
+                            @await Component.InvokeAsync("Accounts")
+                        }
                     </ul>
+
                     <ul class="navbar-nav align-items-center">
                         @if (User.Identity != null && User.Identity.IsAuthenticated)
                         {
@@ -43,9 +52,9 @@
                             <li class="nav-item me-2">
                                 <a class="btn btn-outline-primary btn-sm" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
                             </li>
-                            <!-- Register removed -->
                         }
-                        <!-- Dark/Light toggle -->
+
+                        @* Dark/Light theme toggle *@
                         <li class="nav-item ms-2">
                             <button id="themeToggle" class="btn btn-sm btn-outline-secondary">🌙</button>
                         </li>
@@ -72,7 +81,7 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 
-    <!-- Theme Toggle Script -->
+    @* Dark/Light theme toggle script *@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const toggleBtn = document.getElementById("themeToggle");

@@ -1,0 +1,43 @@
+﻿@model InventoryManagement.ViewModels.AccountsViewModel
+
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        Accounts
+    </a>
+    <ul class="dropdown-menu dropdown-menu-dark p-2" style="min-width: 250px;">
+        <li class="fw-bold">Admins (@Model.Admins.Count)</li>
+        @foreach (var admin in Model.Admins)
+        {
+            <li class="d-flex justify-content-between align-items-center px-2">
+                <span>@admin.UserName</span>
+                @* <form method="post" asp-controller="Account" asp-action="RemoveUser" asp-route-id="@admin.Id" onsubmit="return confirm('Are you sure to remove this user?');">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Remove</button>
+                </form> *@
+            </li>
+        }
+        <li><hr class="dropdown-divider" /></li>
+
+        <li class="fw-bold">Managers (@Model.Managers.Count)</li>
+        @foreach (var manager in Model.Managers)
+        {
+            <li class="d-flex justify-content-between align-items-center px-2">
+                <span>@manager.UserName</span>
+                @* <form method="post" asp-controller="Account" asp-action="RemoveUser" asp-route-id="@manager.Id" onsubmit="return confirm('Are you sure to remove this user?');">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Remove</button>
+                </form> *@
+            </li>
+        }
+        <li><hr class="dropdown-divider" /></li>
+
+        <li class="fw-bold">Staffs (@Model.Staffs.Count)</li>
+        @foreach (var staff in Model.Staffs)
+        {
+            <li class="d-flex justify-content-between align-items-center px-2">
+                <span>@staff.UserName</span>
+                @* <form method="post" asp-controller="Account" asp-action="RemoveUser" asp-route-id="@staff.Id" onsubmit="return confirm('Are you sure to remove this user?');">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Remove</button>
+                </form> *@
+            </li>
+        }
+    </ul>
+</li>

@@ -47,7 +47,7 @@
                         <strong>Quantity:</strong> @transaction.Quantity <br />
                         <strong>Date:</strong> @transaction.Timestamp.ToString("g") <br />
                         <strong>Notes:</strong> @transaction.Notes <br />
-                        <strong>Performed By:</strong> @transaction.PerformedByUserId
+                        <strong>Performed By:</strong> @transaction.PerformedBy.FullName
                     </p>
 
                     @if (User.IsInRole("Admin") || User.IsInRole("Manager"))

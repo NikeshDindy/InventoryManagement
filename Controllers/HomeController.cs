@@ -55,9 +55,9 @@ namespace InventoryManagement.Controllers
         [Authorize(Roles = "Manager")]
         public async Task<IActionResult> ManagerDashboard()
         {
-            var orderCount = (await _unitOfWork.Categories.GetAllAsync()).Count();
+            var orderCount = (await _unitOfWork.Orders.GetAllAsync()).Count();
             var supplierCount = (await _unitOfWork.Suppliers.GetAllAsync()).Count();
-            var productCount = (await _unitOfWork.Categories.GetAllAsync()).Count();
+            var productCount = (await _unitOfWork.Products.GetAllAsync()).Count();
             var transactionCount = (await _unitOfWork.Transactions.GetAllAsync()).Count();
 
             ViewBag.OrderCount = orderCount;
@@ -68,8 +68,17 @@ namespace InventoryManagement.Controllers
         }
 
         [Authorize(Roles = "Staff")]
-        public IActionResult StaffDashboard()
+        public async Task<IActionResult> StaffDashboard()
         {
+            var orderCount = (await _unitOfWork.Orders.GetAllAsync()).Count();
+            var supplierCount = (await _unitOfWork.Suppliers.GetAllAsync()).Count();
+            var productCount = (await _unitOfWork.Products.GetAllAsync()).Count();
+            var categoryCount = (await _unitOfWork.Categories.GetAllAsync()).Count();
+
+            ViewBag.OrderCount = orderCount;
+            ViewBag.SupplierCount = supplierCount;
+            ViewBag.ProductCount = productCount;
+            ViewBag.CategoryCount = categoryCount;
             return View();
         }
 

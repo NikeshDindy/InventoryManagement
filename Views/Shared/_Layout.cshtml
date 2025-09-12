@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/InventoryManagement.styles.css" asp-append-version="true" />
+    @RenderSection("Styles", required: false)
+
     <style>
         header a.btn,
         header a.btn:hover,
@@ -76,11 +78,11 @@
         </main>
     </div>
 
-    <footer class="footer text-center py-3 mt-auto border-top">
+    @* <footer class="footer text-center py-3 mt-auto border-top">
         <div class="container">
             &copy; 2025 - Inventory Management
         </div>
-    </footer>
+    </footer> *@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

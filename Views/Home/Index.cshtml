@@ -5,75 +5,100 @@
 <div class="container mt-5">
 
     <!-- Hero Section -->
-    <section class="text-center p-5 bg-light rounded shadow-sm mb-5">
-        <h1 class="display-4">Welcome to Inventory Management System</h1>
-        <p class="lead">A simple and powerful platform to manage products, suppliers, orders, and transactions efficiently.</p>
+    <section class="text-center p-5 bg-gradient rounded shadow-lg mb-5 text-white" style="background: linear-gradient(135deg, #4e73df, #1cc88a);">
+        <h1 class="display-4 bg-light fw-bold">📦 Welcome to Inventory Management System</h1>
+        <p class="lead bg-light">A simple and powerful platform to manage products, suppliers, orders, and transactions efficiently.</p>
+        <a asp-controller="Account" asp-action="Login" class="btn btn-light btn-lg mt-3 shadow">🚀 Get Started</a>
     </section>
 
     <!-- Features Section -->
-    <section class="row mb-5">
+    <section class="row text-center mb-5">
+        <h2 class="mb-4 fw-bold">✨ Key Features</h2>
         <div class="col-md-4 d-flex">
-            <div class="card shadow-sm p-4 w-100 h-100">
-                <h3>Product Management</h3>
+            <div class="card feature-card shadow-sm p-4 w-100 h-100 border-0">
+                <div class="icon mb-3 display-4 text-primary">📊</div>
+                <h4>Product Management</h4>
                 <p>Easily add, update, and categorize products with stock levels and low-stock alerts.</p>
             </div>
         </div>
         <div class="col-md-4 d-flex">
-            <div class="card shadow-sm p-4 w-100 h-100">
-                <h3>Order Tracking</h3>
+            <div class="card feature-card shadow-sm p-4 w-100 h-100 border-0">
+                <div class="icon mb-3 display-4 text-success">📦</div>
+                <h4>Order Tracking</h4>
                 <p>Track purchase and sales orders with detailed order histories and statuses.</p>
             </div>
         </div>
         <div class="col-md-4 d-flex">
-            <div class="card shadow-sm p-4 w-100 h-100">
-                <h3>Supplier Management</h3>
+            <div class="card feature-card shadow-sm p-4 w-100 h-100 border-0">
+                <div class="icon mb-3 display-4 text-warning">🤝</div>
+                <h4>Supplier Management</h4>
                 <p>Manage supplier details and link them to purchase orders for better organization.</p>
             </div>
         </div>
     </section>
 
-
     <!-- About Section -->
     <section class="p-5 bg-light rounded shadow-sm mb-5">
-        <h2>About This System</h2>
+        <h2 class="fw-bold">📖 About This System</h2>
         <p>
             The Inventory Management System is designed for businesses to simplify their stock control.
-            With features like real-time stock updates, role-based dashboards (Admin, Manager, Staff),
+            With features like <span class="fw-semibold text-primary">real-time stock updates</span>,
+            <span class="fw-semibold text-success">role-based dashboards</span> (Admin, Manager, Staff),
             and detailed transaction logs, you’ll always be in control of your inventory.
         </p>
     </section>
 
     <!-- User Roles Section -->
     <section class="p-5 mb-5 bg-light rounded shadow-sm">
-        <h2 class="text-center mb-4">Role-Based Access</h2>
-        <div class="row">
+        <h2 class="text-center mb-4 fw-bold">👥 Role-Based Access</h2>
+        <div class="row g-4">
             <div class="col-md-4 d-flex">
-                <div class="card shadow-sm p-3 w-100 h-100 text-center">
-                    <h4>Admin</h4>
+                <div class="card role-card shadow-lg p-3 w-100 h-100 text-center border-0">
+                    <h4 class="text-danger">Admin</h4>
                     <p>Manage users, roles, and system settings.</p>
                 </div>
             </div>
             <div class="col-md-4 d-flex">
-                <div class="card shadow-sm p-3 w-100 h-100 text-center">
-                    <h4>Manager</h4>
+                <div class="card role-card shadow-lg p-3 w-100 h-100 text-center border-0">
+                    <h4 class="text-primary">Manager</h4>
                     <p>Oversee orders, suppliers, and inventory reports.</p>
                 </div>
             </div>
             <div class="col-md-4 d-flex">
-                <div class="card shadow-sm p-3 w-100 h-100 text-center">
-                    <h4>Staff</h4>
+                <div class="card role-card shadow-lg p-3 w-100 h-100 text-center border-0">
+                    <h4 class="text-success">Staff</h4>
                     <p>Record transactions and update product stock levels.</p>
                 </div>
             </div>
         </div>
     </section>
 
-
-
     <!-- Contact / Footer Section -->
-    <section class="text-center p-4 bg-dark text-white rounded">
-        <h4>Get Started Today!</h4>
+    <section class="text-center p-4 rounded text-white" style="background: linear-gradient(135deg, #1cc88a, #36b9cc);">
+        <h4>💡 Get Started Today!</h4>
         <p>Manage your inventory smarter and faster.</p>
         <small>&copy; @DateTime.Now.Year Inventory Management System</small>
     </section>
 </div>
+
+@section Styles {
+    <style>
+        .bg-light {
+            color: #000 !important; /* Always black text in light sections */
+        }
+        .feature-card, .role-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+            .feature-card:hover, .role-card:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+                border: 1px solid #4e73df;
+            }
+
+        .icon {
+            animation: pulse 1.5s infinite;
+        }
+        
+    </style>
+}

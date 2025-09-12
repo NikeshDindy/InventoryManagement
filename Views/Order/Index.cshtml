@@ -15,12 +15,12 @@
         </a>
     }
 
-    @if (User.IsInRole("Staff"))
+    @* @if (User.IsInRole("Staff"))
     {
         <a asp-action="CreateSalesOrder" class="btn btn-secondary">
             <i class="bi bi-bag-plus"></i> Create Sales Order
         </a>
-    }
+    } *@
 </div>
 
 <!-- 🔹 Orders as Cards -->
@@ -58,7 +58,7 @@
                             <a asp-action="ApproveOrder" asp-route-id="@order.OrderId"
                                class="btn btn-sm btn-success">Approve</a>
                         }
-                        @if (order.Status != "Cancelled")
+                        @if (order.Status != "Cancelled" && (User.IsInRole("Admin") || User.IsInRole("Manager")))
                         {
                             <a asp-action="CancelOrder" asp-route-id="@order.OrderId"
                                class="btn btn-sm btn-danger ms-1">Cancel</a>

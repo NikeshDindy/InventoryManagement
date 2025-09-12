@@ -155,7 +155,15 @@ namespace InventoryManagement.Controllers
         [Authorize(Roles = "Staff,Manager,Admin")]
         public IActionResult CreateSalesOrder()
         {
-            return View();
+            // Pre-fill defaults
+            var order = new Order
+            {
+                OrderType = "Sales",
+                Status = "Pending",
+                CreatedAt = DateTime.Now
+            };
+
+            return View(order);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -164,14 +172,23 @@ namespace InventoryManagement.Controllers
         {
             if (ModelState.IsValid)
             {
+                // enforce defaults regardless of form tampering
                 order.OrderType = "Sales";
                 order.Status = "Pending";
+                order.CreatedAt = DateTime.Now;
+
                 await _unitOfWork.Orders.AddAsync(order);
                 await _unitOfWork.CompleteAsync();
+
                 return RedirectToAction(nameof(Index));
             }
+
+            // If validation fails, return same view
             return View(order);
         }
+
+
+
         // =======================
         // APPROVE / CANCEL ORDERS (Manager/Admin)
         // =======================

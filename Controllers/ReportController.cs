@@ -62,23 +62,23 @@ public IActionResult Index()
             return View(transactions);
         }
 
-        public async Task<IActionResult> ProfitLoss()
-        {
-            var orders = await _unitOfWork.Orders.GetAllAsync();
-            decimal totalSales = orders
-                .Where(o => o.OrderType.Equals("Sales") && o.Status != "Cancelled")
-                .Sum(o => o.TotalAmount);
-            decimal totalPurchases = orders
-                .Where(o => o.OrderType.Equals("Purchase") && o.Status != "Cancelled")
-                .Sum(o => o.TotalAmount);
-            decimal profitLoss = totalSales - totalPurchases;
+        //public async Task<IActionResult> ProfitLoss()
+        //{
+        //    var orders = await _unitOfWork.Orders.GetAllAsync();
+        //    decimal totalSales = orders
+        //        .Where(o => o.OrderType.Equals("Sales") && o.Status != "Cancelled")
+        //        .Sum(o => o.TotalAmount);
+        //    decimal totalPurchases = orders
+        //        .Where(o => o.OrderType.Equals("Purchase") && o.Status != "Cancelled")
+        //        .Sum(o => o.TotalAmount);
+        //    decimal profitLoss = totalSales - totalPurchases;
 
-            ViewBag.TotalSales = totalSales;
-            ViewBag.TotalPurchases = totalPurchases;
-            ViewBag.ProfitLoss = profitLoss;
+        //    ViewBag.TotalSales = totalSales;
+        //    ViewBag.TotalPurchases = totalPurchases;
+        //    ViewBag.ProfitLoss = profitLoss;
 
-            return View();
-        }
+        //    return View();
+        //}
 
 
         // Additional Features
@@ -102,55 +102,55 @@ public IActionResult Index()
 
         // GET: Report/TopSellingProducts
         // GET: Report/TopSellingProductsFixed
-        public async Task<IActionResult> TopSellingProducts(int topN = 10)
-        {
-            // Load Orders with their OrderDetails and Product info
-            var orders = await _unitOfWork.Orders.GetAllAsync();
+        //public async Task<IActionResult> TopSellingProducts(int topN = 10)
+        //{
+        //    // Load Orders with their OrderDetails and Product info
+        //    var orders = await _unitOfWork.Orders.GetAllAsync();
 
-            // Make sure OrderDetails is not null
-            var orderDetails = orders
-                .Where(o => o.OrderDetails != null)
-                .SelectMany(o => o.OrderDetails)
-                .Where(od => od.Product != null)
-                .ToList();
+        //    // Make sure OrderDetails is not null
+        //    var orderDetails = orders
+        //        .Where(o => o.OrderDetails != null)
+        //        .SelectMany(o => o.OrderDetails)
+        //        .Where(od => od.Product != null)
+        //        .ToList();
 
-            var topProducts = orderDetails
-                .GroupBy(od => new { od.Product.ProductId, od.Product.Name })
-                .Select(g => new
-                {
-                    ProductId = g.Key.ProductId,
-                    ProductName = g.Key.Name,
-                    TotalQuantitySold = g.Sum(od => od.Quantity)
-                })
-                .OrderByDescending(p => p.TotalQuantitySold)
-                .Take(topN)
-                .ToList();
+        //    var topProducts = orderDetails
+        //        .GroupBy(od => new { od.Product.ProductId, od.Product.Name })
+        //        .Select(g => new
+        //        {
+        //            ProductId = g.Key.ProductId,
+        //            ProductName = g.Key.Name,
+        //            TotalQuantitySold = g.Sum(od => od.Quantity)
+        //        })
+        //        .OrderByDescending(p => p.TotalQuantitySold)
+        //        .Take(topN)
+        //        .ToList();
 
-            return View("TopSellingProducts", topProducts);
+        //    return View("TopSellingProducts", topProducts);
 
-        }
+        //}
 
 
         // GET: Report/InventoryTurnover
         // Calculates inventory turnover ratio based on sales and average inventory
-        public async Task<IActionResult> InventoryTurnover()
-        {
-            var products = await _unitOfWork.Products.GetAllAsync();
-            var orders = await _unitOfWork.Orders.GetAllAsync();
+        //public async Task<IActionResult> InventoryTurnover()
+        //{
+        //    var products = await _unitOfWork.Products.GetAllAsync();
+        //    var orders = await _unitOfWork.Orders.GetAllAsync();
 
-            decimal totalCostOfGoodsSold = orders
-                .Where(o => o.OrderType == "Sales" && o.Status != "Cancelled")
-                .SelectMany(o => o.OrderDetails)
-                .Sum(od => od.LineTotal);
+        //    decimal totalCostOfGoodsSold = orders
+        //        .Where(o => o.OrderType == "Sales" && o.Status != "Cancelled")
+        //        .SelectMany(o => o.OrderDetails)
+        //        .Sum(od => od.LineTotal);
 
-            decimal averageInventoryValue = products
-                .Average(p => p.UnitPrice * p.StockQuantity);
+        //    decimal averageInventoryValue = products
+        //        .Average(p => p.UnitPrice * p.StockQuantity);
 
-            decimal turnoverRatio = averageInventoryValue == 0 ? 0 : totalCostOfGoodsSold / averageInventoryValue;
+        //    decimal turnoverRatio = averageInventoryValue == 0 ? 0 : totalCostOfGoodsSold / averageInventoryValue;
 
-            ViewBag.TurnoverRatio = turnoverRatio;
+        //    ViewBag.TurnoverRatio = turnoverRatio;
 
-            return View();
-        }
+        //    return View();
+        //}
     }
 }

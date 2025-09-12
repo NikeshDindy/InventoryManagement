@@ -5,7 +5,7 @@
 
     var totalOrders = Model.Count();
     var pendingOrders = Model.Count(o => o.Status == "Pending");
-    var fulfilledOrders = Model.Count(o => o.Status == "Fulfilled");
+    var fulfilledOrders = Model.Count(o => o.Status == "Approved");
     var cancelledOrders = Model.Count(o => o.Status == "Cancelled");
     var totalRevenue = Model.Sum(o => o.TotalAmount);
 }
@@ -27,7 +27,7 @@
     </div>
     <div class="col-md-3 mb-3">
         <div class="card border-light-glow p-3 text-center">
-            <h5>Fulfilled</h5>
+            <h5>Approved</h5>
             <h2>@fulfilledOrders</h2>
         </div>
     </div>
@@ -48,7 +48,7 @@
     </div>
 </div>
 
-<div class="row mb-3">
+@* <div class="row mb-3">
     <div class="col-md-3">
         <label for="startDate" class="form-label">Start Date</label>
         <input type="date" id="startDate" class="form-control" />
@@ -69,7 +69,7 @@
     <div class="col-md-3 d-flex align-items-end">
         <button id="filterBtn" class="btn btn-primary w-100">Filter</button>
     </div>
-</div>
+</div> *@
 
 <div class="table-responsive mt-4">
     <table class="table table-hover table-striped border shadow-sm" id="ordersTable">
@@ -91,7 +91,7 @@
                     <td>
                         <span class="badge
                             @(order.Status == "Pending" ? "bg-warning text-dark" :
-                                                        order.Status == "Fulfilled" ? "bg-success" :
+                                                                                      order.Status == "Approved" ? "bg-success" :
                                                         order.Status == "Cancelled" ? "bg-danger" : "bg-secondary")">
                         @order.Status
                     </span>

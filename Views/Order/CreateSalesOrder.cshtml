@@ -5,18 +5,27 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Create Sales Order</h2>
+<h2 class="mb-4">📝 Create Sales Order</h2>
 
 <form asp-action="CreateSalesOrder" method="post">
     <div class="mb-3">
         <label asp-for="OrderNumber" class="form-label"></label>
-        <input asp-for="OrderNumber" class="form-control" />
+        <input asp-for="OrderNumber" class="form-control" placeholder="SO-1001" />
         <span asp-validation-for="OrderNumber" class="text-danger"></span>
     </div>
 
-    <input type="hidden" asp-for="OrderType" value="Sales" />
+    <div class="mb-3">
+        <label asp-for="TotalAmount" class="form-label"></label>
+        <input asp-for="TotalAmount" class="form-control" placeholder="Enter total amount" />
+        <span asp-validation-for="TotalAmount" class="text-danger"></span>
+    </div>
 
-    <button type="submit" class="btn btn-primary">Create</button>
+    @* Hidden defaults *@
+    <input type="hidden" asp-for="OrderType" value="Sales" />
+    <input type="hidden" asp-for="Status" value="Pending" />
+    <input type="hidden" asp-for="CreatedAt" value="@DateTime.Now" />
+
+    <button type="submit" class="btn btn-primary">💾 Save Order</button>
     <a asp-action="Index" class="btn btn-secondary">Cancel</a>
 </form>
 
